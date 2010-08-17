@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: com.animoto.api.job.DirectingJobTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.028 sec <<< FAILURE!
+testToJson(com.animoto.api.job.DirectingJobTest)  Time elapsed: 0.009 sec  <<< ERROR!
+java.lang.NoSuchFieldError: ORIGINAL
+	at com.animoto.api.manifest.DirectingManifest.<init>(DirectingManifest.java:15)
+	at com.animoto.api.job.DirectingJobTest.testToJson(DirectingJobTest.java:12)
+
