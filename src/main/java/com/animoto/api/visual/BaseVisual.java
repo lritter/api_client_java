@@ -2,14 +2,18 @@ package com.animoto.api.visual;
 
 import com.animoto.api.enums.VisualType;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class BaseVisual implements Visual {
 
-  protected VisualType visualType = null;
+  @SerializedName("type") protected VisualType visualType = null;
 
   public String getType() {
-    if (visualType == null)
+    if (visualType == null) {
       return null;
-    else
-      return visualType.getType();
+    }
+    else {
+      return visualType.getValue();
+    }
   }
 }

@@ -8,7 +8,10 @@ public class Footage extends BaseVisual {
   private AudioMix audioMix = AudioMix.NONE;
   private Float startTime = new Float(0);
   private Float duration;
-  private VisualType visualType = VisualType.FOOTAGE;
+
+  public Footage() {
+    visualType = VisualType.FOOTAGE;
+  }
 
   public void setSourceUrl(String sourceUrl) {
     this.sourceUrl = sourceUrl;

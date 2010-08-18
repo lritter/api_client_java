@@ -1,16 +1,16 @@
 package com.animoto.api.job;
 
 import com.animoto.api.enums.HttpCallbackFormat;
-import com.animoto.api.enums.Style;
-import com.animoto.api.gson.serializer.StyleSerializer;
 
-import com.google.gson.GsonBuilder;
+import com.animoto.api.util.GsonUtil;
+
 import com.google.gson.Gson;
-import com.google.gson.FieldNamingPolicy;
 
 public abstract class BaseJob implements Job {
-  private String httpCallback;
-  private HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
+  protected String httpCallback;
+  protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
+  protected String location;
+  protected String state;
 
   public void setHttpCallback(String httpCallback) {
     this.httpCallback = httpCallback;
@@ -28,9 +28,31 @@ public abstract class BaseJob implements Job {
     return httpCallbackFormat;
   }
 
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public String getState() {
+    return state;
+  }
+
+  public boolean isPending() {
+    return !("completed".equals(state));
+  }
+
+  public boolean isComplete() {
+    return !isPending();
+  }
+
   protected Gson newGson() {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-    return gsonBuilder.create();
+    return GsonUtil.create();
   }
 }

@@ -6,7 +6,10 @@ public class TitleCard extends BaseVisual {
   private Boolean spotlit;
   private String h1;
   private String h2;
-  private VisualType visualType = VisualType.TITLE_CARD;
+
+  public TitleCard() {
+    visualType = VisualType.TITLE_CARD;
+  }
 
   public void setSpotlit(Boolean spotlit) {
     this.spotlit = spotlit;

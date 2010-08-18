@@ -3,22 +3,31 @@ package com.animoto.api.manifest;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.animoto.api.Song;
+
 import com.animoto.api.visual.Visual;
 import com.animoto.api.enums.Pacing;
 import com.animoto.api.enums.Style;
 
 public class DirectingManifest {
-  List<Visual> visuals = new ArrayList<Visual>();
-  String title;
-  String producerName;
-  Pacing pacing = Pacing.DEFAULT;
-  Style style = Style.ORIGINAL;
+  private Visual[] visuals = new Visual[0];
+  private String title;
+  private String producerName;
+  private Pacing pacing = Pacing.DEFAULT;
+  private Style style = Style.ORIGINAL;
+  private Song song;
  
   public void addVisual(Visual visual) {
-    visuals.add(visual);
+    /*
+      Unfortunately, JSON serialization isn't happy with Collections so we use a typed array :/
+     */
+    List list = new ArrayList();
+    list.addAll(java.util.Arrays.asList(visuals));
+    list.add(visual);
+    visuals = (Visual[]) list.toArray(new Visual[list.size()]);
   }
 
-  public List<Visual> getVisuals() {
+  public Visual[] getVisuals() {
     return visuals;
   }
 
@@ -52,5 +61,13 @@ public class DirectingManifest {
 
   public Style getStyle() {
     return style;
+  }
+
+  public void setSong(Song song) {
+    this.song = song;
+  }
+
+  public Song getSong() {
+    return song;
   }
 }

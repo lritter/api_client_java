@@ -3,3 +3,7 @@
 == Requirements
 
 == Dependencies
+
+== Integration Tests
+
+  mvn -Dtest=ApiClientIntegrationTest test

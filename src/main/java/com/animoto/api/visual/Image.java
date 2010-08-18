@@ -5,9 +5,12 @@ import com.animoto.api.enums.VisualType;
 
 public class Image extends BaseVisual {
   private Boolean spotlit;
-  private ExifOrientation exifOrientation;
+  private ExifOrientation rotation;
   private String sourceUrl;
-  private VisualType visualType = VisualType.IMAGE;
+
+  public Image() {
+    visualType = VisualType.IMAGE;
+  }
 
   public void setSpotlit(Boolean spotlit) {
     this.spotlit = spotlit;
@@ -17,12 +20,12 @@ public class Image extends BaseVisual {
     return spotlit;
   }
 
-  public void setExifOrientation(ExifOrientation exifOrientation) {
-    this.exifOrientation = exifOrientation;
+  public void setRotation(ExifOrientation rotation) {
+    this.rotation = rotation;
   }
 
-  public ExifOrientation getExifOrientation() {
-    return exifOrientation;
+  public ExifOrientation getRotation() {
+    return rotation;
   }
 
   public void setSourceUrl(String sourceUrl) {
