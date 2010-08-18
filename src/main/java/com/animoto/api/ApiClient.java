@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public class ApiClient {
+  private static final String DIRECTING_JOB_TYPE = "application/vnd.animoto.directing_job-v1+json";
+  private static final String DIRECTING_MANIFEST_TYPE = "application/vnd.animoto.directing_manifest-v1+json";
   private String key;
   private String secret;
   private String apiHost = "https://api2-staging.animoto.com";
@@ -85,8 +87,8 @@ public class ApiClient {
 
     try {
       directingJob.setDirectingManifest(directingManifest);
-      headers.put("Content-Type", "application/vnd.animoto.directing_manifest-v1+json"); 
-      headers.put("Accept", "application/vnd.animoto.directing_job-v1+json");
+      headers.put("Content-Type", DIRECTING_MANIFEST_TYPE);
+      headers.put("Accept", DIRECTING_JOB_TYPE);
       httpResponse = doHttpPost(apiHost + "/jobs/directing", directingJob.toJson(), headers);
       handleDirectingJobResponse(directingJob, httpResponse, 201);
     }
@@ -106,7 +108,7 @@ public class ApiClient {
 
     try {
       if (job instanceof DirectingJob) {
-        headers.put("Accept", "application/vnd.animoto.directing_job-v1+json");
+        headers.put("Accept", DIRECTING_JOB_TYPE);
         httpResponse = doHttpGet(location, headers);
         handleDirectingJobResponse((DirectingJob) job, httpResponse, 200); 
       }
