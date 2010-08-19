@@ -21,12 +21,15 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.BeanUtils;
 
+import com.google.gson.annotations.SerializedName;
+
 public abstract class BaseResource implements Resource {
   protected String httpCallback;
   protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
   protected String state;
 	protected String requestId;
 	protected Map<String, String> links = new HashMap<String, String>();
+	protected Map<String, String> metadata = new HashMap<String, String>();
 
   public void setHttpCallback(String httpCallback) {
     this.httpCallback = httpCallback;
@@ -80,6 +83,14 @@ public abstract class BaseResource implements Resource {
 		return links;
 	}
 
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata = metadata;
+	}
+
+	public Map<String, String> getMetadata() {
+		return metadata;
+	}
+
   protected Gson newGson() {
     return GsonUtil.create();
   }
@@ -92,15 +103,18 @@ public abstract class BaseResource implements Resource {
 
     statusCode = httpResponse.getStatusLine().getStatusCode();
     body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
+		apiResponse = newGson().fromJson(body, ApiResponse.class);
     if (statusCode != expectedStatusCode) {
-      throw new HttpExpectationException(statusCode, expectedStatusCode, body);
+      throw new HttpExpectationException(statusCode, expectedStatusCode, body, apiResponse.getResponse().getStatus());
     }
 
-		// Parse the JSON
-		apiResponse = newGson().fromJson(body, ApiResponse.class);
+		apiResponse.getResponse();
+		apiResponse.getResponse().getPayload();
+		apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
     dtoBaseResource = apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
     doErrorableBeanCopy(dtoBaseResource);
     setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
+
     if (getLocation() == null) {
       throw new ContractError();
     }

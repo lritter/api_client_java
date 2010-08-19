@@ -11,17 +11,11 @@ import com.animoto.api.resource.RenderingJob;
 import com.animoto.api.manifest.DirectingManifest;
 import com.animoto.api.manifest.RenderingManifest;
 
-import com.animoto.api.dto.ApiResponse;
-
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.exception.HttpException;
 
-import com.animoto.api.error.ContractError;
-
 import com.animoto.api.enums.HttpCallbackFormat;
-
-import com.animoto.api.util.GsonUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;

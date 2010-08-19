@@ -85,9 +85,36 @@ public class ApiClientIntegrationTest extends TestCase {
 			apiClient.reload(storyboard);
 			assertNotNull(storyboard.getLinks());
 			assertTrue(storyboard.getLinks().size() > 0);
+			assertNotNull(storyboard.getMetadata());
+			assertTrue(storyboard.getMetadata().size() > 0);
 		}
 		catch (Exception e) {
 			fail(e.toString());
+		}
+	}
+
+	public void testRenderingError() throws Exception {
+    DirectingJob directingJob = createDirectingJob();
+    RenderingJob renderingJob = null;
+    RenderingManifest renderingManifest = new RenderingManifest();
+    RenderingProfile renderingProfile = new RenderingProfile();
+ 
+    renderingProfile.setFramerate(new Float(1.23));
+    renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
+    renderingManifest.setRenderingProfile(renderingProfile);
+		try {
+      renderingJob = apiClient.render(renderingManifest);
+			fail("Expected error from API!");
+		}
+		catch (HttpExpectationException e) {
+			assertEquals(201, e.getExpectedCode());
+			assertEquals(400, e.getReceivedCode());
+			assertNotNull(e.getApiErrors());
+			assertNotNull(e.getBody());
+			assertEquals(5, e.getApiErrors().length);
+		}
+		catch (Exception e) {
+			throw e;
 		}
 	}
 

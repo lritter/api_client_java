@@ -2,9 +2,7 @@ package com.animoto.api.resource;
 
 import com.animoto.api.Jsonable;
 import com.animoto.api.manifest.DirectingManifest;
-import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.HttpExpectationException;
-import com.animoto.api.error.ContractError;
 import com.animoto.api.util.GsonUtil;
 
 import java.io.IOException;
