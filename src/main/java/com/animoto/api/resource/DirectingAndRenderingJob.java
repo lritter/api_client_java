@@ -3,6 +3,12 @@ package com.animoto.api.resource;
 import com.animoto.api.Jsonable;
 import com.animoto.api.DirectingManifest;
 import com.animoto.api.RenderingManifest;
+import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.exception.HttpException;
+
+import org.apache.http.HttpResponse;
+
+import java.io.IOException;
 
 public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
 
@@ -32,6 +38,12 @@ public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
 	public RenderingManifest getRenderingManifest() {
 		return renderingManifest;
 	}
+
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+    super.handleHttpResponse(httpResponse, expectedStatusCode);
+    populateStoryboard();
+    populateVideo();
+  }
 
 	public String toJson() {
 		return newGson().toJson(new Container(this));

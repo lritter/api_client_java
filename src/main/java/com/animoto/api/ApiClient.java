@@ -123,6 +123,7 @@ public class ApiClient {
 
 		directingAndRenderingJob.setDirectingManifest(directingManifest);
     directingAndRenderingJob.setRenderingManifest(renderingManifest);
+    renderingManifest.setStoryboardUrl(null);
     httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
     try {
       directingAndRenderingJob.handleHttpResponse(httpResponse, 201);

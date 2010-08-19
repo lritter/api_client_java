@@ -34,10 +34,7 @@ public class RenderingJob extends BaseResource implements Jsonable {
   }
 
   public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-		Video video;
-
     super.handleHttpResponse(httpResponse, expectedStatusCode);
-
 		populateStoryboard();
 		populateVideo();
   }

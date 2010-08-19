@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 public class Payload {
   private DirectingJob directingJob;
 	private RenderingJob renderingJob;
+  private DirectingAndRenderingJob directingAndRenderingJob;
 	private Storyboard storyboard;
 	private Video video;
 
@@ -25,6 +26,10 @@ public class Payload {
 	public Video getVideo() {
 		return video;
 	}
+
+  public DirectingAndRenderingJob getDirectingAndRenderingJob() {
+    return directingAndRenderingJob;
+  }
 
 	public BaseResource getBaseResource(Class clazz) {
     try {
