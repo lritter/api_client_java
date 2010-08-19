@@ -28,7 +28,7 @@ public class ApiClientIntegrationTest extends TestCase {
     apiClient = new ApiClient("bb0d0e005ac4012dc17712313b013462", "c0fe4cfca8bf544b8d0e687247a600ef55ff82e3");
   }
 
-  public DirectingJob testDirecting() {
+  protected DirectingJob createDirectingJob() {
     DirectingManifest directingManifest = new DirectingManifest();
     DirectingJob directingJob = null;
 
@@ -73,8 +73,12 @@ public class ApiClientIntegrationTest extends TestCase {
 		return directingJob;
   }
 
+	public void testDirecting() {
+		createDirectingJob();
+	}
+
 	public void testReloadStoryboard() {
-		DirectingJob directingJob = testDirecting();
+		DirectingJob directingJob = createDirectingJob();
 		Storyboard storyboard = directingJob.getStoryboard();
 
 		try {
@@ -86,7 +90,7 @@ public class ApiClientIntegrationTest extends TestCase {
 	}
 
 	public void testRendering() {
-		DirectingJob directingJob = testDirecting();	
+		DirectingJob directingJob = createDirectingJob();	
 		RenderingJob renderingJob;
 		RenderingManifest renderingManifest = new RenderingManifest();
 		RenderingProfile renderingProfile = new RenderingProfile();

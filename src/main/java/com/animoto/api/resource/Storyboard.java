@@ -1,6 +1,7 @@
 package com.animoto.api.resource;
 
 import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.util.StringUtil;
 
 import org.apache.http.HttpResponse;
 
@@ -16,7 +17,8 @@ public class Storyboard extends BaseGetOnlyResource {
 	}
 
   public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-    int statusCode;
-    String body;
+
+		String body = validateHttpExpectations(httpResponse, expectedStatusCode);	
+		System.out.println("HERE IS MY BODY " + body);
 	}
 }

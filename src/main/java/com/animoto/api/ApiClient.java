@@ -21,7 +21,6 @@ import com.animoto.api.error.ContractError;
 
 import com.animoto.api.enums.HttpCallbackFormat;
 
-import com.animoto.api.util.StringUtil;
 import com.animoto.api.util.GsonUtil;
 
 import org.apache.http.HttpResponse;
@@ -154,7 +153,7 @@ public class ApiClient {
     try {
       headers.put("Content-Type", baseResource.getContentType());
       headers.put("Accept", baseResource.getAccept());
-      httpResponse = doHttpPost(apiHost + "/resources/" + context, ((Jsonable) baseResource).toJson(), headers);
+      httpResponse = doHttpPost(apiHost + "/jobs/" + context, ((Jsonable) baseResource).toJson(), headers);
     }
     catch (IOException e) {
       throw new HttpException(e);

@@ -6,7 +6,6 @@ import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.error.ContractError;
 import com.animoto.api.util.GsonUtil;
-import com.animoto.api.util.StringUtil;
 
 import java.io.IOException;
 
@@ -36,16 +35,9 @@ public class RenderingJob extends BaseResource implements Jsonable {
   }
 
   public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-    int statusCode;
-    String body;
+		String body = validateHttpExpectations(httpResponse, expectedStatusCode);
     ApiResponse apiResponse;
     com.animoto.api.dto.RenderingJob dtoRenderingJob;
-
-    statusCode = httpResponse.getStatusLine().getStatusCode();
-    body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
-    if (statusCode != expectedStatusCode) {
-      throw new HttpExpectationException(statusCode, expectedStatusCode, body);
-    }
 
     apiResponse = GsonUtil.create().fromJson(body, ApiResponse.class);
     dtoRenderingJob = apiResponse.getResponse().getPayload().getRenderingJob();
