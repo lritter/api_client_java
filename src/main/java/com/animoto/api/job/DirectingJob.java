@@ -2,10 +2,28 @@ package com.animoto.api.job;
 
 import com.animoto.api.Jsonable;
 import com.animoto.api.manifest.DirectingManifest;
+import com.animoto.api.gettable.Storyboard;
+import com.animoto.api.dto.ApiResponse;
+import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.error.ContractError;
+import com.animoto.api.util.GsonUtil;
+import com.animoto.api.util.StringUtil;
+
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
 
 public class DirectingJob extends BaseJob implements Jsonable {
   private DirectingManifest directingManifest;
-  private String storyboard;
+  private Storyboard storyboard;
+
+	public String getContentType() {
+		return "application/vnd.animoto.directing_manifest-v1+json";
+	}
+
+	public String getAccept() {
+		return "application/vnd.animoto.directing_job-v1+json";
+	}
 
   public void setDirectingManifest(DirectingManifest directingManifest) {
     this.directingManifest = directingManifest;
@@ -15,16 +33,47 @@ public class DirectingJob extends BaseJob implements Jsonable {
     return directingManifest;
   }
 
-  public void setStoryboard(String storyboard) {
+  public void setStoryboard(Storyboard storyboard) {
     this.storyboard = storyboard;
   }
 
-  public String getStoryboard() {
+  public Storyboard getStoryboard() {
     return storyboard;
   }
 
   public String toJson() {
     return newGson().toJson(new Container(this));
+  }
+
+	public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+    int statusCode;
+    String body;
+    ApiResponse apiResponse;
+    Storyboard storyboard;
+    com.animoto.api.dto.DirectingJob dtoDirectingJob;
+
+    statusCode = httpResponse.getStatusLine().getStatusCode();
+    body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
+    if (statusCode != expectedStatusCode) {
+      throw new HttpExpectationException(statusCode, expectedStatusCode, body);
+    }
+
+    // Parse the state and links of the directing job JSON
+    apiResponse = GsonUtil.create().fromJson(body, ApiResponse.class);
+    dtoDirectingJob = apiResponse.getResponse().getPayload().getDirectingJob();
+    setState(dtoDirectingJob.getState());
+    setLocation(dtoDirectingJob.getLinks().get("self"));
+    setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
+    if (getLocation() == null) {
+      throw new ContractError();
+    }
+
+    // If the directing job is complete, then populate the storyboard.
+    if (isComplete()) {
+      storyboard = new Storyboard();
+      storyboard.setLocation(dtoDirectingJob.getLinks().get("storyboard"));
+      setStoryboard(storyboard);
+    }
   }
 
   /**

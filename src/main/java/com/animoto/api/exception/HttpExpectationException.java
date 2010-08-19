@@ -1,11 +1,11 @@
 package com.animoto.api.exception;
 
-public class DirectingException extends ApiException {
+public class HttpExpectationException extends ApiException {
   private int receivedCode;
   private int expectedCode;
   private String body;
 
-  public DirectingException(int receivedCode, int expectedCode,  String body) {
+  public HttpExpectationException(int receivedCode, int expectedCode, String body) {
     this.receivedCode = receivedCode;
     this.body = body;
     this.expectedCode = expectedCode;

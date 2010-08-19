@@ -1,16 +1,23 @@
 package com.animoto.api.job;
 
 import com.animoto.api.enums.HttpCallbackFormat;
-
 import com.animoto.api.util.GsonUtil;
+import com.animoto.api.exception.ApiException;
+
+import org.apache.http.HttpResponse;
 
 import com.google.gson.Gson;
+
+import java.io.IOException;
 
 public abstract class BaseJob implements Job {
   protected String httpCallback;
   protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
   protected String location;
   protected String state;
+	protected String requestId;
+
+	public abstract void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws ApiException, IOException;
 
   public void setHttpCallback(String httpCallback) {
     this.httpCallback = httpCallback;
@@ -43,6 +50,14 @@ public abstract class BaseJob implements Job {
   public String getState() {
     return state;
   }
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+
+	public String getRequestId() {
+		return requestId;
+	}
 
   public boolean isPending() {
     return !("completed".equals(state));

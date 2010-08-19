@@ -1,7 +1,7 @@
 package com.animoto.api.enums;
 
 public enum VerticalResolution {
-  V_360P("360p"), V_480P("480p"), V_720P("720p");
+  VR_360P("360p"), VR_480P("480p"), VR_720P("720p");
 
   private String value;
 

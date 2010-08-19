@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import java.lang.reflect.*;
 
-public class SimpleEnumSerializer implements JsonSerializer {
+public class ValueSerializer implements JsonSerializer {
   public JsonElement serialize(Object object, Type objectType, JsonSerializationContext context) {
     try {
       Method method = object.getClass().getMethod("getValue");

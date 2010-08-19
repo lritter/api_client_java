@@ -24,7 +24,7 @@ public class RenderingJobTest extends TestCase {
 
     renderingProfile.setFramerate(new Float(29.97));
     renderingProfile.setFormat(Format.H264);
-    renderingProfile.setVerticalResolution(VerticalResolution.V_720P);
+    renderingProfile.setVerticalResolution(VerticalResolution.VR_720P);
     renderingManifest.setRenderingProfile(renderingProfile);
 
     renderingManifest.setStoryboardUrl("http://animoto.com/storyboard/123");

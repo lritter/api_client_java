@@ -4,14 +4,19 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.animoto.api.job.Job;
 import com.animoto.api.job.BaseJob;
 import com.animoto.api.job.DirectingJob;
+import com.animoto.api.job.RenderingJob;
 import com.animoto.api.manifest.DirectingManifest;
+import com.animoto.api.manifest.RenderingManifest;
+import com.animoto.api.gettable.Gettable;
+import com.animoto.api.gettable.Storyboard;
 
 import com.animoto.api.dto.ApiResponse;
 
 import com.animoto.api.exception.ApiException;
-import com.animoto.api.exception.DirectingException;
+import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.exception.HttpException;
 
 import com.animoto.api.error.ContractError;
@@ -35,8 +40,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public class ApiClient {
-  private static final String DIRECTING_JOB_TYPE = "application/vnd.animoto.directing_job-v1+json";
-  private static final String DIRECTING_MANIFEST_TYPE = "application/vnd.animoto.directing_manifest-v1+json";
   private String key;
   private String secret;
   private String apiHost = "https://api2-staging.animoto.com";
@@ -63,34 +66,21 @@ public class ApiClient {
   /**
    *
    */
-  public DirectingJob direct(DirectingManifest directingManifest) throws DirectingException, HttpException {
+  public DirectingJob direct(DirectingManifest directingManifest) throws HttpExpectationException, HttpException {
     return direct(directingManifest, null, null);
   }
 
   /**
    *
    */
-  public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws DirectingException, HttpException {
+  public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     DirectingJob directingJob = new DirectingJob();
-    HttpResponse httpResponse = null;
-    int statusCode;
-    String body;
-    Map<String, String> headers = new HashMap<String, String>();
+    HttpResponse httpResponse;
 
-    if (httpCallback != null) {
-      directingJob.setHttpCallback(httpCallback);
-    }
-
-    if (httpCallbackFormat != null) {
-      directingJob.setHttpCallbackFormat(httpCallbackFormat);
-    }
-
-    try {
-      directingJob.setDirectingManifest(directingManifest);
-      headers.put("Content-Type", DIRECTING_MANIFEST_TYPE);
-      headers.put("Accept", DIRECTING_JOB_TYPE);
-      httpResponse = doHttpPost(apiHost + "/jobs/directing", directingJob.toJson(), headers);
-      handleDirectingJobResponse(directingJob, httpResponse, 201);
+    directingJob.setDirectingManifest(directingManifest);
+    httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
+		try {
+      directingJob.handleHttpResponse(httpResponse, 201);
     }
     catch (IOException e) {
       throw new HttpException(e);
@@ -98,23 +88,42 @@ public class ApiClient {
     return directingJob; 
   }
 
+	/**
+	 *
+	 */
+	public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+		return render(renderingManifest, null, null);
+	}
+
+	/**
+	 *
+	 */
+	public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+		RenderingJob renderingJob = new RenderingJob();
+		HttpResponse httpResponse;
+
+		renderingJob.setRenderingManifest(renderingManifest);
+		httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
+		try {
+			renderingJob.handleHttpResponse(httpResponse, 201);
+		}
+		catch (IOException e) {
+			throw new HttpException(e);
+		}	
+		return renderingJob;
+	}
+
   /**
    *
    */
-  public void reload(BaseJob job) throws ApiException, HttpException {
-    String location = job.getLocation();
+  public void reload(Job job) throws ApiException, HttpException {
     Map<String, String> headers = new HashMap<String, String>();
     HttpResponse httpResponse;
 
     try {
-      if (job instanceof DirectingJob) {
-        headers.put("Accept", DIRECTING_JOB_TYPE);
-        httpResponse = doHttpGet(location, headers);
-        handleDirectingJobResponse((DirectingJob) job, httpResponse, 200); 
-      }
-      else {
-        throw new Error("NOT SUPPORTED");
-      }
+      headers.put("Accept", job.getAccept());
+      httpResponse = doHttpGet(job.getLocation(), headers);
+			((BaseJob) job).handleHttpResponse(httpResponse, 200);
     }
     catch (IOException e) {
       throw new HttpException(e);
@@ -132,6 +141,29 @@ public class ApiClient {
     return doHttpRequest(httpPost, headers);
   }
 
+	private HttpResponse doApiHttpPost(BaseJob baseJob, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
+    HttpResponse httpResponse = null;
+    Map<String, String> headers = new HashMap<String, String>();
+
+    if (httpCallback != null) {
+      baseJob.setHttpCallback(httpCallback);
+    }
+
+    if (httpCallbackFormat != null) {
+      baseJob.setHttpCallbackFormat(httpCallbackFormat);
+    }
+
+    try {
+      headers.put("Content-Type", baseJob.getContentType());
+      headers.put("Accept", baseJob.getAccept());
+      httpResponse = doHttpPost(apiHost + "/jobs/" + context, ((Jsonable) baseJob).toJson(), headers);
+    }
+    catch (IOException e) {
+      throw new HttpException(e);
+    }
+		return httpResponse;
+	}
+
   private HttpResponse doHttpRequest(HttpRequestBase httpRequestBase, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
     UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(key, secret);
     DefaultHttpClient httpClient = new DefaultHttpClient();
@@ -144,31 +176,4 @@ public class ApiClient {
     httpClient.getCredentialsProvider().setCredentials(AuthScope.ANY, credentials);
     return httpClient.execute(httpRequestBase);
   } 
-  
-  private void handleDirectingJobResponse(DirectingJob directingJob, HttpResponse httpResponse, int expectedStatusCode) throws DirectingException, IOException {
-    int statusCode;
-    String body;
-    ApiResponse apiResponse;
-    com.animoto.api.dto.DirectingJob dtoDirectingJob;
-    statusCode = httpResponse.getStatusLine().getStatusCode();
-    body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
-
-    if (statusCode != expectedStatusCode) {
-      throw new DirectingException(statusCode, expectedStatusCode, body);
-    }
-
-    // Parse the state and links of the directing job JSON
-    apiResponse = GsonUtil.create().fromJson(body, ApiResponse.class);
-    dtoDirectingJob = apiResponse.getResponse().getPayload().getDirectingJob();
-    directingJob.setState(dtoDirectingJob.getState());
-    directingJob.setLocation(dtoDirectingJob.getLinks().get("self"));
-    if (directingJob.getLocation() == null) {
-      throw new ContractError();
-    }
-
-    // If the directing job is complete, then populate the storyboard.
-    if (directingJob.isComplete()) {
-      directingJob.setStoryboard(dtoDirectingJob.getLinks().get("storyboard"));
-    }
-  }
 }
