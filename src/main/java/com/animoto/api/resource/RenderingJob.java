@@ -34,21 +34,6 @@ public class RenderingJob extends BaseResource implements Jsonable {
     return newGson().toJson(new Container(this));
   }
 
-  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-		String body = validateHttpExpectations(httpResponse, expectedStatusCode);
-    ApiResponse apiResponse;
-    com.animoto.api.dto.RenderingJob dtoRenderingJob;
-
-    apiResponse = GsonUtil.create().fromJson(body, ApiResponse.class);
-    dtoRenderingJob = apiResponse.getResponse().getPayload().getRenderingJob();
-    setState(dtoRenderingJob.getState());
-    setLocation(dtoRenderingJob.getLinks().get("self"));
-    setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
-    if (getLocation() == null) {
-      throw new ContractError();
-    }
-  }
-
   /**
    * Allows for a Gson to reflect the outer class context into JSON.
    */

@@ -3,24 +3,30 @@ package com.animoto.api.resource;
 import com.animoto.api.enums.HttpCallbackFormat;
 import com.animoto.api.util.GsonUtil;
 import com.animoto.api.util.StringUtil;
+import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.error.ContractError;
 
 import org.apache.http.HttpResponse;
 
 import com.google.gson.Gson;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import java.io.IOException;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 public abstract class BaseResource implements Resource {
   protected String httpCallback;
   protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
-  protected String location;
   protected String state;
 	protected String requestId;
-	protected Map<String, String> links;
-
-	public abstract void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws ApiException, IOException;
+	protected Map<String, String> links = new HashMap<String, String>();
 
   public void setHttpCallback(String httpCallback) {
     this.httpCallback = httpCallback;
@@ -38,12 +44,8 @@ public abstract class BaseResource implements Resource {
     return httpCallbackFormat;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
   public String getLocation() {
-    return location;
+   	return links.get("self");
   }
 
   public void setState(String state) {
@@ -70,18 +72,52 @@ public abstract class BaseResource implements Resource {
     return !isPending();
   }
 
+	public void setLinks(Map<String, String> links) {
+		this.links = links;
+	}
+	
+	public Map<String, String> getLinks() {
+		return links;
+	}
+
   protected Gson newGson() {
     return GsonUtil.create();
   }
 
-	protected String validateHttpExpectations(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+	public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
     int statusCode;
     String body;
+		ApiResponse apiResponse;
+		BaseResource dtoBaseResource;
+
     statusCode = httpResponse.getStatusLine().getStatusCode();
     body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
     if (statusCode != expectedStatusCode) {
       throw new HttpExpectationException(statusCode, expectedStatusCode, body);
     }
-		return body;
+
+		// Parse the JSON
+		apiResponse = newGson().fromJson(body, ApiResponse.class);
+    dtoBaseResource = apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
+    doErrorableBeanCopy(dtoBaseResource);
+    setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
+    if (getLocation() == null) {
+      throw new ContractError();
+    }
+	}
+
+	protected void doErrorableBeanCopy(Object bean) {
+    try {
+      BeanUtils.copyProperties(this, bean);
+    }
+    catch (IllegalAccessException e) {
+      throw new Error();
+    }
+    catch (IllegalArgumentException e) {
+      throw new Error();
+    }
+    catch (InvocationTargetException e) {
+      throw new Error();
+    }
 	}
 }

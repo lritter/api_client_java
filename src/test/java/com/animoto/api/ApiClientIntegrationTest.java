@@ -83,6 +83,8 @@ public class ApiClientIntegrationTest extends TestCase {
 
 		try {
 			apiClient.reload(storyboard);
+			assertNotNull(storyboard.getLinks());
+			assertTrue(storyboard.getLinks().size() > 0);
 		}
 		catch (Exception e) {
 			fail(e.toString());

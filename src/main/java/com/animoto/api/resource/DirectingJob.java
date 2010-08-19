@@ -44,26 +44,13 @@ public class DirectingJob extends BaseResource implements Jsonable {
   }
 
 	public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-		String body = validateHttpExpectations(httpResponse, expectedStatusCode);
-    ApiResponse apiResponse;
-    Storyboard storyboard;
-    com.animoto.api.dto.DirectingJob dtoDirectingJob;
-
-    // Parse the state and links of the directing job JSON
-    apiResponse = GsonUtil.create().fromJson(body, ApiResponse.class);
-    dtoDirectingJob = apiResponse.getResponse().getPayload().getDirectingJob();
-    setState(dtoDirectingJob.getState());
-    setLocation(dtoDirectingJob.getLinks().get("self"));
-    setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
-    if (getLocation() == null) {
-      throw new ContractError();
-    }
+		super.handleHttpResponse(httpResponse, expectedStatusCode);
 
     // If the directing job is complete, then populate the storyboard.
     if (isComplete()) {
-      storyboard = new Storyboard();
-      storyboard.setLocation(dtoDirectingJob.getLinks().get("storyboard"));
-      setStoryboard(storyboard);
+     	storyboard = new Storyboard();
+     	storyboard.getLinks().put("self", getLinks().get("storyboard"));
+     	setStoryboard(storyboard);
     }
   }
 
