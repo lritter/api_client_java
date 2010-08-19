@@ -1,4 +1,4 @@
-package com.animoto.api.job;
+package com.animoto.api.resource;
 
 import junit.framework.TestCase;
 

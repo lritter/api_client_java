@@ -1,6 +1,6 @@
-package com.animoto.api.job;
+package com.animoto.api.resource;
 
-public interface Job {
+public interface Resource {
 	public String getLocation();
 
 	public String getContentType();

@@ -4,14 +4,12 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.animoto.api.job.Job;
-import com.animoto.api.job.BaseJob;
-import com.animoto.api.job.DirectingJob;
-import com.animoto.api.job.RenderingJob;
+import com.animoto.api.resource.Resource;
+import com.animoto.api.resource.BaseResource;
+import com.animoto.api.resource.DirectingJob;
+import com.animoto.api.resource.RenderingJob;
 import com.animoto.api.manifest.DirectingManifest;
 import com.animoto.api.manifest.RenderingManifest;
-import com.animoto.api.gettable.Gettable;
-import com.animoto.api.gettable.Storyboard;
 
 import com.animoto.api.dto.ApiResponse;
 
@@ -116,14 +114,14 @@ public class ApiClient {
   /**
    *
    */
-  public void reload(Job job) throws ApiException, HttpException {
+  public void reload(Resource resource) throws ApiException, HttpException {
     Map<String, String> headers = new HashMap<String, String>();
     HttpResponse httpResponse;
 
     try {
-      headers.put("Accept", job.getAccept());
-      httpResponse = doHttpGet(job.getLocation(), headers);
-			((BaseJob) job).handleHttpResponse(httpResponse, 200);
+      headers.put("Accept", resource.getAccept());
+      httpResponse = doHttpGet(resource.getLocation(), headers);
+			((BaseResource) resource).handleHttpResponse(httpResponse, 200);
     }
     catch (IOException e) {
       throw new HttpException(e);
@@ -141,22 +139,22 @@ public class ApiClient {
     return doHttpRequest(httpPost, headers);
   }
 
-	private HttpResponse doApiHttpPost(BaseJob baseJob, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
+	private HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
     HttpResponse httpResponse = null;
     Map<String, String> headers = new HashMap<String, String>();
 
     if (httpCallback != null) {
-      baseJob.setHttpCallback(httpCallback);
+      baseResource.setHttpCallback(httpCallback);
     }
 
     if (httpCallbackFormat != null) {
-      baseJob.setHttpCallbackFormat(httpCallbackFormat);
+      baseResource.setHttpCallbackFormat(httpCallbackFormat);
     }
 
     try {
-      headers.put("Content-Type", baseJob.getContentType());
-      headers.put("Accept", baseJob.getAccept());
-      httpResponse = doHttpPost(apiHost + "/jobs/" + context, ((Jsonable) baseJob).toJson(), headers);
+      headers.put("Content-Type", baseResource.getContentType());
+      headers.put("Accept", baseResource.getAccept());
+      httpResponse = doHttpPost(apiHost + "/resources/" + context, ((Jsonable) baseResource).toJson(), headers);
     }
     catch (IOException e) {
       throw new HttpException(e);

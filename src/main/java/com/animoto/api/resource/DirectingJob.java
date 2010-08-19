@@ -1,8 +1,7 @@
-package com.animoto.api.job;
+package com.animoto.api.resource;
 
 import com.animoto.api.Jsonable;
 import com.animoto.api.manifest.DirectingManifest;
-import com.animoto.api.gettable.Storyboard;
 import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.error.ContractError;
@@ -13,7 +12,7 @@ import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 
-public class DirectingJob extends BaseJob implements Jsonable {
+public class DirectingJob extends BaseResource implements Jsonable {
   private DirectingManifest directingManifest;
   private Storyboard storyboard;
 

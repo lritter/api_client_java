@@ -1,4 +1,4 @@
-package com.animoto.api.job;
+package com.animoto.api.resource;
 
 import com.animoto.api.Jsonable;
 import com.animoto.api.manifest.RenderingManifest;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 
-public class RenderingJob extends BaseJob implements Jsonable {
+public class RenderingJob extends BaseResource implements Jsonable {
   private RenderingManifest renderingManifest;
 
 	public String getContentType() {

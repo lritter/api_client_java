@@ -2,9 +2,9 @@ package com.animoto.api;
 
 import junit.framework.TestCase;
 
-import com.animoto.api.job.DirectingJob;
-import com.animoto.api.job.RenderingJob;
-import com.animoto.api.job.Storyboard;
+import com.animoto.api.resource.DirectingJob;
+import com.animoto.api.resource.RenderingJob;
+import com.animoto.api.resource.Storyboard;
 
 import com.animoto.api.manifest.DirectingManifest;
 import com.animoto.api.manifest.RenderingManifest;
@@ -15,8 +15,7 @@ import com.animoto.api.visual.TitleCard;
 import com.animoto.api.visual.Image;
 
 import com.animoto.api.exception.ApiException;
-import com.animoto.api.exception.DirectingException;
-import com.animoto.api.exception.RenderingException;
+import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.exception.HttpException;
 
 import com.animoto.api.enums.VerticalResolution;
@@ -80,6 +79,9 @@ public class ApiClientIntegrationTest extends TestCase {
 
 		try {
 			apiClient.reload(storyboard);
+		}
+		catch (Exception e) {
+			fail(e.toString());
 		}
 	}
 

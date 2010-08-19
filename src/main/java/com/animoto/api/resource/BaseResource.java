@@ -1,4 +1,4 @@
-package com.animoto.api.job;
+package com.animoto.api.resource;
 
 import com.animoto.api.enums.HttpCallbackFormat;
 import com.animoto.api.util.GsonUtil;
@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-public abstract class BaseJob implements Job {
+public abstract class BaseResource implements Resource {
   protected String httpCallback;
   protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
   protected String location;
