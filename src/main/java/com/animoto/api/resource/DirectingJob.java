@@ -1,7 +1,7 @@
 package com.animoto.api.resource;
 
 import com.animoto.api.Jsonable;
-import com.animoto.api.manifest.DirectingManifest;
+import com.animoto.api.DirectingManifest;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.util.GsonUtil;
 
@@ -11,7 +11,6 @@ import org.apache.http.HttpResponse;
 
 public class DirectingJob extends BaseResource implements Jsonable {
   private DirectingManifest directingManifest;
-  private Storyboard storyboard;
 
 	public String getContentType() {
 		return "application/vnd.animoto.directing_manifest-v1+json";
@@ -29,27 +28,13 @@ public class DirectingJob extends BaseResource implements Jsonable {
     return directingManifest;
   }
 
-  public void setStoryboard(Storyboard storyboard) {
-    this.storyboard = storyboard;
-  }
-
-  public Storyboard getStoryboard() {
-    return storyboard;
-  }
-
   public String toJson() {
     return newGson().toJson(new Container(this));
   }
 
 	public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
 		super.handleHttpResponse(httpResponse, expectedStatusCode);
-
-    // If the directing job is complete, then populate the storyboard.
-    if (isComplete()) {
-     	storyboard = new Storyboard();
-     	storyboard.getLinks().put("self", getLinks().get("storyboard"));
-     	setStoryboard(storyboard);
-    }
+		populateStoryboard();
   }
 
   /**

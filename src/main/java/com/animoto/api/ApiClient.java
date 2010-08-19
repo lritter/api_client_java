@@ -8,8 +8,9 @@ import com.animoto.api.resource.Resource;
 import com.animoto.api.resource.BaseResource;
 import com.animoto.api.resource.DirectingJob;
 import com.animoto.api.resource.RenderingJob;
-import com.animoto.api.manifest.DirectingManifest;
-import com.animoto.api.manifest.RenderingManifest;
+import com.animoto.api.resource.DirectingAndRenderingJob;
+import com.animoto.api.DirectingManifest;
+import com.animoto.api.RenderingManifest;
 
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
@@ -102,6 +103,34 @@ public class ApiClient {
 			throw new HttpException(e);
 		}	
 		return renderingJob;
+	}
+
+
+	/**
+	 *
+	 */
+	public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+		return directAndRender(directingManifest, renderingManifest, null, null);
+	}
+
+
+	/**
+	 *
+	 */
+	public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+		DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
+    HttpResponse httpResponse;
+
+		directingAndRenderingJob.setDirectingManifest(directingManifest);
+    directingAndRenderingJob.setRenderingManifest(renderingManifest);
+    httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
+    try {
+      directingAndRenderingJob.handleHttpResponse(httpResponse, 201);
+    }
+    catch (IOException e) {
+      throw new HttpException(e);
+    }
+    return directingAndRenderingJob;
 	}
 
   /**

@@ -1,8 +1,9 @@
 package com.animoto.api.resource;
 
 import com.animoto.api.Jsonable;
-import com.animoto.api.manifest.RenderingManifest;
+import com.animoto.api.RenderingManifest;
 import com.animoto.api.util.GsonUtil;
+import com.animoto.api.exception.HttpExpectationException;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ import org.apache.http.HttpResponse;
 
 public class RenderingJob extends BaseResource implements Jsonable {
   private RenderingManifest renderingManifest;
+	private Video video;
 
 	public String getContentType() {
 		return "application/vnd.animoto.rendering_manifest-v1+json";
@@ -26,9 +28,18 @@ public class RenderingJob extends BaseResource implements Jsonable {
   public RenderingManifest getRenderingManifest() {
     return renderingManifest;
   }
-  
+
   public String toJson() {
     return newGson().toJson(new Container(this));
+  }
+
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+		Video video;
+
+    super.handleHttpResponse(httpResponse, expectedStatusCode);
+
+		populateStoryboard();
+		populateVideo();
   }
 
   /**

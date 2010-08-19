@@ -2,17 +2,9 @@ package com.animoto.api.resource;
 
 import junit.framework.TestCase;
 
-import com.animoto.api.visual.Image;
-import com.animoto.api.visual.TitleCard;
-import com.animoto.api.visual.Footage;
-import com.animoto.api.Song;
-
-import com.animoto.api.manifest.DirectingManifest;
-
+import com.animoto.api.DirectingManifest;
 import com.animoto.api.enums.HttpCallbackFormat;
-import com.animoto.api.enums.ExifOrientation;
-import com.animoto.api.enums.AudioMix;
-import com.animoto.api.enums.Pacing;
+import com.animoto.api.util.Factory;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -20,35 +12,8 @@ import org.json.simple.parser.*;
 public class DirectingJobTest extends TestCase {
   public void testToJson() throws ParseException {
     DirectingJob directingJob = new DirectingJob();
-    DirectingManifest directingManifest = new DirectingManifest();
-    Image image = new Image();
-    TitleCard titleCard = new TitleCard();
-    Footage footage = new Footage();
-    Song song = new Song();
+    DirectingManifest directingManifest = Factory.newDirectingManifest();
     String json = null;
-
-    song.setSourceUrl("http://my.com/song.mp3");
-    song.setTitle("My Test Song");
-    song.setArtist("Juno");
-    song.setDuration(new Float(120));
-    song.setStartTime(new Float(5));
-    directingManifest.setSong(song);
-
-    image.setSourceUrl("http://somewhere.com/image_1.gif");
-    image.setRotation(ExifOrientation.TWO);
-    directingManifest.addVisual(image);
-
-    titleCard.setH1("hello");
-    titleCard.setH2("world");
-    directingManifest.addVisual(titleCard);
-
-    footage.setSourceUrl("http://somewhere.com/my_video.mp4");
-    footage.setAudioMix(AudioMix.MIX);
-    directingManifest.addVisual(footage);
-
-    directingManifest.setTitle("My Animoto Video");
-    directingManifest.setProducerName("Animoto"); 
-    directingManifest.setPacing(Pacing.HALF);
 
     directingJob.setHttpCallback("http://partner.com/callback");
     directingJob.setHttpCallbackFormat(HttpCallbackFormat.JSON);
@@ -74,9 +39,9 @@ public class DirectingJobTest extends TestCase {
     assertEquals("HALF", jsonDirectingManifest.get("pacing"));
 
     jsonSong = (JSONObject) jsonDirectingManifest.get("song");
-    assertEquals("http://my.com/song.mp3", jsonSong.get("source_url"));
-    assertEquals("My Test Song", jsonSong.get("title"));
-    assertEquals("Juno", jsonSong.get("artist"));
+    assertEquals("http://api.client.java.animoto.s3.amazonaws.com/test_assets/song.mp3", jsonSong.get("source_url"));
+    assertEquals("Song 2", jsonSong.get("title"));
+    assertEquals("Blur", jsonSong.get("artist"));
     assertEquals(120.0, jsonSong.get("duration"));
     assertEquals(5.0, jsonSong.get("start_time"));
     
@@ -86,11 +51,11 @@ public class DirectingJobTest extends TestCase {
       jsonVisual = (JSONObject) jsonVisuals.get(i);
       if (jsonVisual.get("type").equals("image")) {
         assertEquals(2, ((Number) jsonVisual.get("rotation")).intValue());
-        assertEquals("http://somewhere.com/image_1.gif", jsonVisual.get("source_url"));
+        assertEquals("http://api.client.java.animoto.s3.amazonaws.com/test_assets/image.jpg", jsonVisual.get("source_url"));
       }
       else if (jsonVisual.get("type").equals("footage")) {
         assertEquals("MIX", jsonVisual.get("audio_mix"));  
-        assertEquals("http://somewhere.com/my_video.mp4", jsonVisual.get("source_url"));
+        assertEquals("http://api.client.java.animoto.s3.amazonaws.com/test_assets/footage.mp4", jsonVisual.get("source_url"));
       }
       else if (jsonVisual.get("type").equals("title_card")) {
         assertEquals("hello", jsonVisual.get("h1"));

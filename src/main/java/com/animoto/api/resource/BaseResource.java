@@ -7,6 +7,7 @@ import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.error.ContractError;
+import com.animoto.api.dto.Response;
 
 import org.apache.http.HttpResponse;
 
@@ -30,6 +31,9 @@ public abstract class BaseResource implements Resource {
 	protected String requestId;
 	protected Map<String, String> links = new HashMap<String, String>();
 	protected Map<String, String> metadata = new HashMap<String, String>();
+	protected Storyboard storyboard;
+	protected Video video;
+	protected Response response; 
 
   public void setHttpCallback(String httpCallback) {
     this.httpCallback = httpCallback;
@@ -67,6 +71,10 @@ public abstract class BaseResource implements Resource {
 		return requestId;
 	}
 
+	public boolean isFailed() {
+		return "failed".equals(state);
+	}
+
   public boolean isPending() {
     return !("completed".equals(state));
   }
@@ -91,6 +99,26 @@ public abstract class BaseResource implements Resource {
 		return metadata;
 	}
 
+  public void setStoryboard(Storyboard storyboard) {
+    this.storyboard = storyboard;
+  }
+
+  public Storyboard getStoryboard() {
+    return storyboard;
+  }
+
+  public void setVideo(Video video) {
+    this.video = video;
+  }
+
+  public Video getVideo() {
+    return video;
+  }
+
+	public Response getResponse() {
+		return response;
+	}
+
   protected Gson newGson() {
     return GsonUtil.create();
   }
@@ -108,15 +136,36 @@ public abstract class BaseResource implements Resource {
       throw new HttpExpectationException(statusCode, expectedStatusCode, body, apiResponse.getResponse().getStatus());
     }
 
-		apiResponse.getResponse();
-		apiResponse.getResponse().getPayload();
-		apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
+		response = apiResponse.getResponse();
     dtoBaseResource = apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
+		
     doErrorableBeanCopy(dtoBaseResource);
     setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
 
     if (getLocation() == null) {
       throw new ContractError();
+    }
+	}
+
+	protected void populateStoryboard() {
+    if (isComplete()) {
+      Storyboard storyboard = new Storyboard();
+      storyboard.getLinks().put("self", getLinks().get("storyboard"));
+      setStoryboard(storyboard);
+			if (storyboard.getLocation() == null) {
+				throw new ContractError();
+			}
+    }
+	}
+
+	protected void populateVideo() {
+    if (isComplete()) {
+      Video video = new Video();
+      video.getLinks().put("self", getLinks().get("video"));
+      setVideo(video);
+			if (video.getLocation() == null) {
+				throw new ContractError();
+			}
     }
 	}
 

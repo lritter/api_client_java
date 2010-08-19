@@ -1,4 +1,4 @@
-package com.animoto.api.manifest;
+package com.animoto.api;
 
 import com.animoto.api.enums.VerticalResolution;
 import com.animoto.api.enums.Format;

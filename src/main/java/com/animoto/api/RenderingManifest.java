@@ -1,4 +1,4 @@
-package com.animoto.api.manifest;
+package com.animoto.api;
 
 public class RenderingManifest {
   private String storyboardUrl;

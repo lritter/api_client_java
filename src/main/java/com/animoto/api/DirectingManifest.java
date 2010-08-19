@@ -1,9 +1,7 @@
-package com.animoto.api.manifest;
+package com.animoto.api;
 
 import java.util.List;
 import java.util.ArrayList;
-
-import com.animoto.api.Song;
 
 import com.animoto.api.visual.Visual;
 import com.animoto.api.enums.Pacing;

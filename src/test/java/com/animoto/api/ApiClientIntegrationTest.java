@@ -2,13 +2,20 @@ package com.animoto.api;
 
 import junit.framework.TestCase;
 
+import java.util.Iterator;
+
+import com.animoto.api.util.Factory;
+
+import com.animoto.api.resource.BaseResource;
 import com.animoto.api.resource.DirectingJob;
 import com.animoto.api.resource.RenderingJob;
+import com.animoto.api.resource.DirectingAndRenderingJob;
 import com.animoto.api.resource.Storyboard;
+import com.animoto.api.resource.Video;
 
-import com.animoto.api.manifest.DirectingManifest;
-import com.animoto.api.manifest.RenderingManifest;
-import com.animoto.api.manifest.RenderingProfile;
+import com.animoto.api.DirectingManifest;
+import com.animoto.api.RenderingManifest;
+import com.animoto.api.RenderingProfile;
 
 import com.animoto.api.Song;
 import com.animoto.api.visual.TitleCard;
@@ -28,56 +35,11 @@ public class ApiClientIntegrationTest extends TestCase {
     apiClient = new ApiClient("bb0d0e005ac4012dc17712313b013462", "c0fe4cfca8bf544b8d0e687247a600ef55ff82e3");
   }
 
-  protected DirectingJob createDirectingJob() {
-    DirectingManifest directingManifest = new DirectingManifest();
-    DirectingJob directingJob = null;
-
-    Image image = new Image();
-    Song song = new Song();
-    TitleCard titleCard = new TitleCard();
-
-		try {
-
-    	titleCard.setH1("Integration Test");
-    	titleCard.setH2("From Animoto API Java Client");
-    	directingManifest.addVisual(titleCard);
-
-    	image.setSourceUrl("http://api.client.java.animoto.s3.amazonaws.com/banker.jpg");
-    	directingManifest.addVisual(image);
-
-    	song.setSourceUrl("http://api.client.java.animoto.s3.amazonaws.com/blur.mp3");
-    	directingManifest.setSong(song);
- 
-    	// Post a directing job to the API. 
-    	directingJob = apiClient.direct(directingManifest);
-    	assertNotNull(directingJob);
-    	assertNotNull(directingJob.getLocation());
-			assertNotNull(directingJob.getRequestId());
-    	assertEquals("retrieving_assets", directingJob.getState());
-    	assertTrue(directingJob.isPending());
- 
-    	// Wait until it is completed.
-    	while(directingJob.isPending()) {
-      	sleep(3000);
-      	apiClient.reload(directingJob);
-    	}
-    
-    	// Job is complete!
-    	assertTrue(directingJob.isComplete());
-    	assertNotNull(directingJob.getStoryboard());
-			assertNotNull(directingJob.getStoryboard().getLocation());
-		}
-		catch (Exception e) {
-			fail(e.toString());
-		}
-		return directingJob;
-  }
-
-	public void testDirecting() {
+	public void testirecting() {
 		createDirectingJob();
 	}
 
-	public void testReloadStoryboard() {
+	public void testStoryboard() {
 		DirectingJob directingJob = createDirectingJob();
 		Storyboard storyboard = directingJob.getStoryboard();
 
@@ -118,19 +80,85 @@ public class ApiClientIntegrationTest extends TestCase {
 		}
 	}
 
-	public void testRendering() {
+	public void testRenderingJob() {
+		createRenderingJob();
+	}
+
+  public void testVideo() {
+    RenderingJob renderingJob = createRenderingJob();
+    Video video = null;
+
+    try {
+      video = renderingJob.getVideo();
+      apiClient.reload(video);
+      assertNotNull(video.getLinks());
+      assertTrue(video.getLinks().size() > 0);
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+  }
+
+	public void testDirectingAndRendering() {
+		DirectingAndRenderingJob directingAndRenderingJob;
+		DirectingManifest directingManifest = Factory.newDirectingManifest();
+		RenderingManifest renderingManifest = Factory.newRenderingManifest();
+
+		try {
+			directingAndRenderingJob = apiClient.directAndRender(directingManifest, renderingManifest);
+			assertTrue(directingAndRenderingJob.isPending());
+			while(directingAndRenderingJob.isPending()) {
+				sleep(3000);
+				apiClient.reload(directingAndRenderingJob);
+			}
+			assertTrue(directingAndRenderingJob.isComplete());
+			assertNotNull(directingAndRenderingJob.getStoryboard());
+			assertNotNull(directingAndRenderingJob.getVideo());
+		}
+		catch (Exception e) {
+			fail(e.toString());
+		}
+	}
+
+  protected DirectingJob createDirectingJob() {
+    DirectingManifest directingManifest = Factory.newDirectingManifest();
+    DirectingJob directingJob = null;
+
+    try {
+      // Post a directing job to the API. 
+      directingJob = apiClient.direct(directingManifest);
+      assertNotNull(directingJob);
+      assertNotNull(directingJob.getLocation());
+      assertNotNull(directingJob.getRequestId());
+      assertEquals("retrieving_assets", directingJob.getState());
+      assertTrue(directingJob.isPending());
+
+      // Wait until it is completed.
+      while(directingJob.isPending()) {
+        sleep(3000);
+        apiClient.reload(directingJob);
+				assertFalse(directingJob.isFailed());
+      }
+
+      // Job is complete!
+      assertTrue(directingJob.isComplete());
+      assertNotNull(directingJob.getStoryboard());
+			assertNotNull(directingJob.getResponse());
+      assertNotNull(directingJob.getStoryboard().getLocation());
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+    return directingJob;
+  }
+
+	protected RenderingJob createRenderingJob() {
 		DirectingJob directingJob = createDirectingJob();	
-		RenderingJob renderingJob;
-		RenderingManifest renderingManifest = new RenderingManifest();
-		RenderingProfile renderingProfile = new RenderingProfile();
+		RenderingJob renderingJob = null;
+		RenderingManifest renderingManifest = Factory.newRenderingManifest();
 	
 		try {
-			renderingProfile.setFormat(Format.H264);
-			renderingProfile.setVerticalResolution(VerticalResolution.VR_480P);
-			renderingProfile.setFramerate(new	Float(30));
 			renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
-			renderingManifest.setRenderingProfile(renderingProfile);
-
 			renderingJob = apiClient.render(renderingManifest);	
 			assertTrue(renderingJob.isPending());
 			assertNotNull(renderingJob.getLocation());
@@ -140,12 +168,14 @@ public class ApiClientIntegrationTest extends TestCase {
 				apiClient.reload(renderingJob);
 			}
 			assertTrue(renderingJob.isComplete());
+			assertNotNull(renderingJob.getVideo());
+			assertNotNull(renderingJob.getStoryboard());
 		}
 		catch (Exception e) {
 			fail(e.toString());
 		}
+		return renderingJob;
 	}
-
 
   private void sleep(int time) {
     try {
@@ -153,4 +183,24 @@ public class ApiClientIntegrationTest extends TestCase {
     }
     catch (Exception ignored) {}
   }
+
+	private void print(BaseResource baseResource) {
+		StringBuffer buf = new StringBuffer();
+		String key;
+		Iterator it = null;
+
+		buf.append("@" + new java.util.Date().toString() + "\n");
+		buf.append("------------------------------------------------------------\n");
+		buf.append("request id: " + baseResource.getRequestId() + "\n");
+		buf.append("state: " + baseResource.getState() + "\n");
+		buf.append("location: " + baseResource.getLocation() + "\n");
+		buf.append("current links\n");
+		buf.append("-------------\n");
+		it = baseResource.getLinks().keySet().iterator();
+		while (it.hasNext()) {
+			key = (String) it.next();
+			buf.append(key + ": " + baseResource.getLinks().get(key) + "\n");	
+		}
+		System.out.println(buf.toString());
+	}
 }

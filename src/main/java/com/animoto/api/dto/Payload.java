@@ -8,6 +8,7 @@ public class Payload {
   private DirectingJob directingJob;
 	private RenderingJob renderingJob;
 	private Storyboard storyboard;
+	private Video video;
 
   public DirectingJob getDirectingJob() {
     return directingJob;
@@ -19,6 +20,10 @@ public class Payload {
 
 	public Storyboard getStoryboard() {
 		return storyboard;
+	}
+
+	public Video getVideo() {
+		return video;
 	}
 
 	public BaseResource getBaseResource(Class clazz) {
