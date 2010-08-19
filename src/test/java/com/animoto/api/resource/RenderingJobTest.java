@@ -37,7 +37,7 @@ public class RenderingJobTest extends TestCase {
     assertEquals("http://animoto.com/storyboard/123", jsonRenderingManifest.get("storyboard_url"));
 
     jsonRenderingProfile = (JSONObject) jsonRenderingManifest.get("rendering_profile");
-    assertEquals(29.97, jsonRenderingProfile.get("framerate")); 
+    assertEquals(30.0, jsonRenderingProfile.get("framerate")); 
     assertEquals("h264", jsonRenderingProfile.get("format"));
     assertEquals("720p", jsonRenderingProfile.get("vertical_resolution"));
   } 
