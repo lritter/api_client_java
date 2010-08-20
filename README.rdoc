@@ -22,10 +22,11 @@ You must also have a valid Animoto Platform credential set to use the library.
 
 The project uses the basic Maven tasks: 
 
-* mvn clean
-* mvn compile
-* mvn test
-* mvn package
+* mvn clean - Clean your project directory.
+* mvn compile - Compile the library.
+* mvn test - Run all unit tests for the library.
+* mvn package - Create a JAR file of the library.
+* mvn javadoc:javadoc - Generate Javadoc documentation locally.
 
 == Dependencies
 
