@@ -12,13 +12,13 @@ import org.apache.http.HttpResponse;
 public class DirectingJob extends BaseResource implements Jsonable {
   private DirectingManifest directingManifest;
 
-	public String getContentType() {
-		return "application/vnd.animoto.directing_manifest-v1+json";
-	}
+  public String getContentType() {
+    return "application/vnd.animoto.directing_manifest-v1+json";
+  }
 
-	public String getAccept() {
-		return "application/vnd.animoto.directing_job-v1+json";
-	}
+  public String getAccept() {
+    return "application/vnd.animoto.directing_job-v1+json";
+  }
 
   public void setDirectingManifest(DirectingManifest directingManifest) {
     this.directingManifest = directingManifest;
@@ -32,9 +32,9 @@ public class DirectingJob extends BaseResource implements Jsonable {
     return newGson().toJson(new Container(this));
   }
 
-	public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
-		super.handleHttpResponse(httpResponse, expectedStatusCode);
-		populateStoryboard();
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+    super.handleHttpResponse(httpResponse, expectedStatusCode);
+    populateStoryboard();
   }
 
   /**
