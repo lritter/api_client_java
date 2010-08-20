@@ -10,7 +10,7 @@ The Animoto API Client requires Java 1.5. It is highly recommended that you have
 
 To download or learn more about Maven:
 
-http://maven.apache.org/
+http://maven.apache.org
 
 You must also have a valid Animoto Platform credential set to use the library.
 
@@ -27,13 +27,13 @@ The project uses the basic Maven tasks:
 
 The Animoto API Client uses the following libraries:
 
-* Apache Commons Bean Utils (http://commons.apache.org/beanutils/)
-* Apache Http Client 4.x (http://hc.apache.org/httpcomponents-client/)
-* Google Gson (http://code.google.com/p/google-gson/)
+* Apache Commons Bean Utils (http://commons.apache.org/beanutils)
+* Apache Http Client 4.x (http://hc.apache.org/httpcomponents-client)
+* Google Gson (http://code.google.com/p/google-gson)
 
 For testing, the following is used to verify JSON results:
 
-* JSON Simple (http://code.google.com/p/json-simple/)
+* JSON Simple (http://code.google.com/p/json-simple)
 
 All versions and dependencies are declared in the Maven project object model.
 
