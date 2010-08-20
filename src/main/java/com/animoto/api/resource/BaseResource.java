@@ -52,7 +52,7 @@ public abstract class BaseResource implements Resource {
   }
 
   public String getLocation() {
-   	return links.get("self");
+		return links.get("self");
   }
 
   public void setState(String state) {
