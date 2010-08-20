@@ -31,10 +31,27 @@ import org.apache.http.entity.StringEntity;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * ApiClient is the main class for interacting with the Animoto API. <p/>
+ * 
+ * For further information visit: <p/>
+ *
+ * <a href="http://github.com/animoto/api_client_java">http://github.com/animoto/api_client_java</a>
+ * 
+ * @author  SunDawg
+ * @since   1.0
+ * @version 1.0
+ */
 public class ApiClient {
   private String key;
   private String secret;
   private String apiHost = "https://api2-staging.animoto.com";
+
+  /**
+   * Default constructor. You will need to set a key and secret.
+   */
+  public ApiClient() {
+  }
 
   /**
    * Constructor
@@ -72,14 +89,25 @@ public class ApiClient {
   }
 
   /**
-   *
+   * Creates a directing job with no http callbacks.
+   * 
+   * @param       directingManifest           The manifest payload to direct.
+   * @return      DirectingJob
+   * @exception   HttpExpectationException
+   * @exception   HttpException
    */
   public DirectingJob direct(DirectingManifest directingManifest) throws HttpExpectationException, HttpException {
     return direct(directingManifest, null, null);
   }
 
   /**
+   * Creates a directing job with http callbacks.
    *
+   * @param       directingManifest           The manifest payload to direct.
+   * @param       httpCallback                The callback URL the API will communicate back to.
+   * @param       httpCallbackFormat          The payload type when the callback is made.
+   * @exception   HttpExpectationException
+   * @exception   HttpExpectation
    */
   public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     DirectingJob directingJob = new DirectingJob();
@@ -97,14 +125,24 @@ public class ApiClient {
   }
 
   /**
+   * Creates a rendering job with no http callbacks.
    *
+   * @param       renderingManifest           The manifest payload to render.   
+   * @exception   HttpExpectationException
+   * @exception   HttpExpectation
    */
   public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
     return render(renderingManifest, null, null);
   }
 
   /**
+   * Creates a rendering job with http callbacks.
    *
+   * @param       renderingManifest           The manifest payload to render.
+   * @param       httpCallback                The callback URL the API will communicate back to.
+   * @param       httpCallbackFormat          The payload type when the callback is made.
+   * @exception   HttpExpectationException
+   * @exception   HttpExpectation
    */
   public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     RenderingJob renderingJob = new RenderingJob();
@@ -151,9 +189,13 @@ public class ApiClient {
   }
 
   /**
+   * Communicates with the API to grab the latest information for a resource.
    *
+   * @param       resource                    The resource to refresh with the latest information from API.
+   * @exception   HttpException 
+   * @exception   HttpExpectationException
    */
-  public void reload(Resource resource) throws ApiException, HttpException {
+  public void reload(Resource resource) throws HttpException, HttpExpectationException {
     Map<String, String> headers = new HashMap<String, String>();
     HttpResponse httpResponse;
 

@@ -3,6 +3,11 @@ package com.animoto.api.visual;
 import com.animoto.api.enums.VisualType;
 import com.animoto.api.enums.AudioMix;
 
+/**
+ * A Footage object represents video to be used in an Animoto video.
+ *
+ * @see com.animoto.api.DirectingManifest
+ */
 public class Footage extends BaseVisual {
   private String sourceUrl;
   private AudioMix audioMix = AudioMix.NONE;
@@ -13,6 +18,9 @@ public class Footage extends BaseVisual {
     visualType = VisualType.FOOTAGE;
   }
 
+  /**
+   * Set a valid HTTP URL for where the video can be found by the API.
+   */
   public void setSourceUrl(String sourceUrl) {
     this.sourceUrl = sourceUrl;
   }
@@ -21,6 +29,9 @@ public class Footage extends BaseVisual {
     return sourceUrl;
   }
 
+  /**
+   * Set whether the video's audio track should be used or not in the video.
+   */
   public void setAudioMix(AudioMix audioMix) {
     this.audioMix = audioMix;
   }
@@ -29,6 +40,9 @@ public class Footage extends BaseVisual {
     return audioMix;
   }
 
+  /**
+   * Set the start offset used by the API when using the video.
+   */
   public void setStartTime(Float startTime) {
     this.startTime = startTime;
   }
@@ -37,6 +51,9 @@ public class Footage extends BaseVisual {
     return startTime;
   }
 
+  /**
+   * Set how many seconds of video to use.
+   */
   public void setDuration(Float duration) {
     this.duration = duration;
   }

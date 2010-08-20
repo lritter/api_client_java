@@ -9,6 +9,16 @@ import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 
+/**
+ * A DirectingJob represents the status of your directing job on the API.<p/>
+ *
+ * You will need to call ApiClient.reload() in order to obtain the latest information from API.<p/>
+ *
+ * When the directing job is complete, a Storyboard should be available.<p/>
+ *
+ * @see com.animoto.api.ApiClient
+ * @see Storyboard
+ */
 public class DirectingJob extends BaseResource implements Jsonable {
   private DirectingManifest directingManifest;
 

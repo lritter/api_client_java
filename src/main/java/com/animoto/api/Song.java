@@ -1,5 +1,10 @@
 package com.animoto.api;
 
+/**
+ * A Song contains all information related to the audio file to be used when the API directs a video.
+ *
+ * @see DirectingManifest
+ */
 public class Song {
   private String sourceUrl;
   private Float startTime;
@@ -7,6 +12,9 @@ public class Song {
   private String title;
   private String artist;
 
+  /**
+   * Set the HTTP URL to a valid MP3 file for your video.
+   */
   public void setSourceUrl(String sourceUrl) {
     this.sourceUrl = sourceUrl;
   }

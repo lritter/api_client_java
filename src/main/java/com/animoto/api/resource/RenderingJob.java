@@ -9,6 +9,18 @@ import java.io.IOException;
 
 import org.apache.http.HttpResponse;
 
+
+/**
+ * A RenderingJob represents the status of your rendering job on the API.<p/>
+ *
+ * You will need to call ApiClient.reload() in order to obtain the latest information from API.<p/>
+ *
+ * When the directing job is complete, a Storyboard and Video should be available.<p/>
+ *
+ * @see com.animoto.api.ApiClient
+ * @see Video
+ * @see Storyboard
+ */
 public class RenderingJob extends BaseResource implements Jsonable {
   private RenderingManifest renderingManifest;
   private Video video;

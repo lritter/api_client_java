@@ -2,6 +2,13 @@ package com.animoto.api.visual;
 
 import com.animoto.api.enums.VisualType;
 
+/**
+ * A TitleCard represents text to show in your Animoto video.<p/>
+ *
+ * It is added to a DirectingManifest when directing.<p/>
+ *
+ * @see com.animoto.api.DirectingManifest
+ */
 public class TitleCard extends BaseVisual {
   private Boolean spotlit;
   private String h1;

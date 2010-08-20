@@ -1,5 +1,8 @@
 package com.animoto.api.exception;
 
-public class ApiException extends Exception {
+/**
+ * Parent class for all exceptions that are thrown by the API Client for Java.
+ */
+public abstract class ApiException extends Exception {
 
 }

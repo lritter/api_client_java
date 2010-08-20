@@ -24,6 +24,9 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Abstract resource that contains common fields and methods for all child resources.
+ */
 public abstract class BaseResource implements Resource {
   protected String httpCallback;
   protected HttpCallbackFormat httpCallbackFormat = HttpCallbackFormat.XML;
@@ -90,7 +93,10 @@ public abstract class BaseResource implements Resource {
   public void setLinks(Map<String, String> links) {
     this.links = links;
   }
-  
+ 
+  /**
+   * Get the related links of the resource from API.
+   */
   public Map<String, String> getLinks() {
     return links;
   }
@@ -99,6 +105,9 @@ public abstract class BaseResource implements Resource {
     this.metadata = metadata;
   }
 
+  /**
+   * Get the metadata of the resource from API.
+   */
   public Map<String, String> getMetadata() {
     return metadata;
   }
@@ -107,6 +116,13 @@ public abstract class BaseResource implements Resource {
     this.storyboard = storyboard;
   }
 
+  /**
+   * Get the Storyboard associated with the resource, if available.<p/>
+   *
+   * You will need to call ApiClient.reload() to get all associated information.</p>
+   *
+   * @see com.animoto.api.ApiClient
+   */
   public Storyboard getStoryboard() {
     return storyboard;
   }
@@ -115,10 +131,20 @@ public abstract class BaseResource implements Resource {
     this.video = video;
   }
 
+  /**
+   * Get the Video associated with the resource, if available.<p/>
+   *
+   * You will need to call ApiClient.reload() to get all associated information.</p>
+   *
+   * @see com.animoto.api.ApiClient
+   */
   public Video getVideo() {
     return video;
   }
 
+  /**
+   * Get the underlying data transfer object response when deserializing JSON into pojos.
+   */
   public Response getResponse() {
     return response;
   }
@@ -173,7 +199,7 @@ public abstract class BaseResource implements Resource {
     }
   }
 
-  protected void doErrorableBeanCopy(Object bean) {
+  private void doErrorableBeanCopy(Object bean) {
     try {
       BeanUtils.copyProperties(this, bean);
     }
