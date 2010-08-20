@@ -4,7 +4,8 @@ import junit.framework.TestCase;
 
 import java.util.Iterator;
 
-import com.animoto.api.util.Factory;
+import com.animoto.api.util.DirectingManifestFactory;
+import com.animoto.api.util.RenderingManifestFactory;
 
 import com.animoto.api.resource.BaseResource;
 import com.animoto.api.resource.DirectingJob;
@@ -101,8 +102,8 @@ public class ApiClientIntegrationTest extends TestCase {
 
   public void testDirectingAndRendering() {
     DirectingAndRenderingJob directingAndRenderingJob;
-    DirectingManifest directingManifest = Factory.newDirectingManifest();
-    RenderingManifest renderingManifest = Factory.newRenderingManifest();
+    DirectingManifest directingManifest = DirectingManifestFactory.newInstance();
+    RenderingManifest renderingManifest = RenderingManifestFactory.newInstance();
 
     try {
       directingAndRenderingJob = apiClient.directAndRender(directingManifest, renderingManifest);
@@ -121,7 +122,7 @@ public class ApiClientIntegrationTest extends TestCase {
   }
 
   protected DirectingJob createDirectingJob() {
-    DirectingManifest directingManifest = Factory.newDirectingManifest();
+    DirectingManifest directingManifest = DirectingManifestFactory.newInstance();
     DirectingJob directingJob = null;
 
     try {
@@ -136,6 +137,7 @@ public class ApiClientIntegrationTest extends TestCase {
       // Wait until it is completed.
       while(directingJob.isPending()) {
         sleep(3000);
+        print(directingJob);
         apiClient.reload(directingJob);
         assertFalse(directingJob.isFailed());
       }
@@ -155,7 +157,7 @@ public class ApiClientIntegrationTest extends TestCase {
   protected RenderingJob createRenderingJob() {
     DirectingJob directingJob = createDirectingJob(); 
     RenderingJob renderingJob = null;
-    RenderingManifest renderingManifest = Factory.newRenderingManifest();
+    RenderingManifest renderingManifest = RenderingManifestFactory.newInstance();
   
     try {
       renderingManifest.setStoryboard(directingJob.getStoryboard());

@@ -1,14 +1,12 @@
 package com.animoto.api.util;
 
 import com.animoto.api.DirectingManifest;
-import com.animoto.api.RenderingManifest;
-import com.animoto.api.RenderingProfile;
 import com.animoto.api.Song;
 import com.animoto.api.visual.*;
 import com.animoto.api.enums.*;
 
-public class Factory {
-  public static DirectingManifest newDirectingManifest() {
+public class DirectingManifestFactory {
+  public static DirectingManifest newInstance() {
     DirectingManifest directingManifest = new DirectingManifest();
     Image image = new Image();
     TitleCard titleCard = new TitleCard();
@@ -39,18 +37,5 @@ public class Factory {
     directingManifest.setProducerName("Animoto");
     directingManifest.setPacing(Pacing.HALF);
     return directingManifest;
-  }
-
-  public static RenderingManifest newRenderingManifest() {
-    RenderingManifest renderingManifest = new RenderingManifest();
-    RenderingProfile renderingProfile = new RenderingProfile();
-
-    renderingProfile.setFramerate(new Float(30));
-    renderingProfile.setFormat(Format.H264);
-    renderingProfile.setVerticalResolution(VerticalResolution.VR_720P);
-
-    renderingManifest.setRenderingProfile(renderingProfile);
-    renderingManifest.setStoryboardUrl("http://animoto.com/storyboard/123");
-    return renderingManifest;
   }
 }

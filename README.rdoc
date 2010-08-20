@@ -83,12 +83,13 @@ This example shows you to create a Directing Job against the API in order to cre
   // Wait until it is completed or failed.
   while(directingJob.isPending()) {
 
-    // You should probably sleep here.
+    // You should probably sleep here before calling reload.
     apiClient.reload(directingJob);
   }
 
   if (directingJob.isComplete()) {
     // Now we have a storyboard!
+    // Remember to reload the Storyboard if you want the metadata and link information.
     directingJob.getStoryboard();
   }
 
@@ -113,12 +114,13 @@ Once you have a storyboard, you can then tell the API to create a render.
   // Wait until it is completed or failed.
   while(renderingJob.isPending()) {
 
-    // You should probably sleep here.
+    // You should probably sleep here before calling reload.
     apiClient.reload(renderingJob);
   }
 
   if (renderingJob.isComplete()) {
     // Now we have a video!
+    // Remember to reload the Video if you want the metadata and link information.
     renderingJob.getVideo();
   }
 
