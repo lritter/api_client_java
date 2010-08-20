@@ -4,6 +4,10 @@ The Animoto API Client is a Java library to communicate with the Animoto API. To
 
 LINK_TO_ANIMOTO_API_HERE
 
+Javadoc information can be found here:
+
+http://api.client.java.animoto.s3.amazonaws.com/apidocs/index.html
+
 == Requirements
 
 The Animoto API Client requires Java 1.5. It is highly recommended that you have Maven 2.2 or greater installed as well since all of the builds and test scripts work off of Maven.
@@ -42,6 +46,8 @@ All versions and dependencies are declared in the Maven project object model.
 By default when you run tests, only the unit tests are run. If you want to run the integration test against the actual API services, then you can run the primary integration test as follows:
 
   mvn -Dtest=ApiClientIntegrationTest test
+
+You will need to have network connectivity for the integration test to work. The API credentials currently used are specific to the sample testing. Do not use them for your own account.
 
 == Coding Examples
 
