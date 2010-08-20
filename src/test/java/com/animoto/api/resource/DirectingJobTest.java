@@ -16,6 +16,16 @@ public class DirectingJobTest extends TestCase {
     directingJob = new DirectingJob();
   }
 
+  public void testGetUrl() {
+    directingJob.getLinks().put("self", "http://foo.com/bar");
+    assertEquals("http://foo.com/bar", directingJob.getUrl());
+  }
+
+  public void testGetLocation() {
+    directingJob.getLinks().put("self", "http://foo.com/bar");  
+    assertEquals("http://foo.com/bar", directingJob.getLocation());
+  }
+
   public void testIsComplete() {
     directingJob.setState("completed");
     assertTrue(directingJob.isCompleted());

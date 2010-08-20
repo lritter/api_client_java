@@ -51,6 +51,10 @@ public abstract class BaseResource implements Resource {
     return httpCallbackFormat;
   }
 
+  public String getUrl() {
+    return getLocation();
+  }
+
   public String getLocation() {
     return links.get("self");
   }
