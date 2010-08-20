@@ -11,4 +11,8 @@ public class ApiError {
   public String getMessage() {
     return message;
   }
+
+  public String toString() {
+    return code + ": " + message;
+  }
 }

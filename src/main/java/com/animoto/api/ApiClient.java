@@ -47,12 +47,28 @@ public class ApiClient {
     this.secret = secret;
   }
 
+  public void setKey(String key) {
+    this.key = key;
+  }
+
   public String getKey() {
-    return this.key;
+    return key;
+  }
+
+  public void setSecret(String secret) {
+    this.secret = secret;
   }
 
   public String getSecret() {
-    return this.secret;
+    return secret;
+  }
+
+  public void setApiHost(String apiHost) {
+    this.apiHost = apiHost;
+  }
+
+  public String getApiHost() {
+    return apiHost;
   }
 
   /**

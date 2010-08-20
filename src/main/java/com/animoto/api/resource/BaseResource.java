@@ -76,10 +76,10 @@ public abstract class BaseResource implements Resource {
   }
 
   public boolean isPending() {
-    return !isFailed() && !isComplete();
+    return !isFailed() && !isCompleted();
   }
 
-  public boolean isComplete() {
+  public boolean isCompleted() {
     return "completed".equals(state);
   }
 
@@ -148,7 +148,7 @@ public abstract class BaseResource implements Resource {
   }
 
   protected void populateStoryboard() {
-    if (isComplete()) {
+    if (isCompleted()) {
       Storyboard storyboard = new Storyboard();
       storyboard.getLinks().put("self", getLinks().get("storyboard"));
       setStoryboard(storyboard);
@@ -159,7 +159,7 @@ public abstract class BaseResource implements Resource {
   }
 
   protected void populateVideo() {
-    if (isComplete()) {
+    if (isCompleted()) {
       Video video = new Video();
       video.getLinks().put("self", getLinks().get("video"));
       setVideo(video);

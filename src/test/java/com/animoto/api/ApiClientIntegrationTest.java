@@ -18,7 +18,6 @@ import com.animoto.api.DirectingManifest;
 import com.animoto.api.RenderingManifest;
 import com.animoto.api.RenderingProfile;
 
-import com.animoto.api.Song;
 import com.animoto.api.visual.TitleCard;
 import com.animoto.api.visual.Image;
 
@@ -40,6 +39,20 @@ public class ApiClientIntegrationTest extends TestCase {
     createDirectingJob();
   }
 
+  public void testHttpExceptionThrownOnNetworkIssues() {
+    try {
+      apiClient.setApiHost("http://nowhere.com");
+      apiClient.direct(DirectingManifestFactory.newInstance());
+      fail("Expected exception to be thrown!");
+    }
+    catch (HttpException e) {
+      assertTrue(e.getException() instanceof java.net.UnknownHostException);
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+  }
+
   public void testStoryboard() {
     DirectingJob directingJob = createDirectingJob();
     Storyboard storyboard = directingJob.getStoryboard();
@@ -56,7 +69,33 @@ public class ApiClientIntegrationTest extends TestCase {
     }
   }
 
-  public void testRenderingError() throws Exception {
+  public void testDirectingFail() throws Exception {
+    DirectingJob directingJob = null;
+    DirectingManifest directingManifest = DirectingManifestFactory.newInstance();
+    Image image = new Image();
+    ApiError[] apiErrors = null;
+
+    try {
+      image.setSourceUrl("http://bad.com/link.gif");
+      directingManifest.clearVisuals();
+      directingManifest.addVisual(image);
+      directingJob = apiClient.direct(directingManifest);
+      assertTrue(directingJob.isPending());
+      while (directingJob.isPending()) {
+        sleep(3000);
+        apiClient.reload(directingJob);
+      }
+      assertTrue(directingJob.isFailed());
+      assertNotNull(directingJob.getResponse());
+      apiErrors = directingJob.getResponse().getStatus().getApiErrors();
+      assertTrue(apiErrors.length > 0);
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+  }
+
+  public void testRenderingRaisedException() throws Exception {
     DirectingJob directingJob = createDirectingJob();
     RenderingJob renderingJob = null;
     RenderingManifest renderingManifest = new RenderingManifest();
@@ -112,7 +151,7 @@ public class ApiClientIntegrationTest extends TestCase {
         sleep(3000);
         apiClient.reload(directingAndRenderingJob);
       }
-      assertTrue(directingAndRenderingJob.isComplete());
+      assertTrue(directingAndRenderingJob.isCompleted());
       assertNotNull(directingAndRenderingJob.getStoryboard());
       assertNotNull(directingAndRenderingJob.getVideo());
     }
@@ -137,13 +176,12 @@ public class ApiClientIntegrationTest extends TestCase {
       // Wait until it is completed.
       while(directingJob.isPending()) {
         sleep(3000);
-        print(directingJob);
         apiClient.reload(directingJob);
         assertFalse(directingJob.isFailed());
       }
 
       // Job is complete!
-      assertTrue(directingJob.isComplete());
+      assertTrue(directingJob.isCompleted());
       assertNotNull(directingJob.getStoryboard());
       assertNotNull(directingJob.getResponse());
       assertNotNull(directingJob.getStoryboard().getLocation());
@@ -169,7 +207,7 @@ public class ApiClientIntegrationTest extends TestCase {
         sleep(3000);
         apiClient.reload(renderingJob);
       }
-      assertTrue(renderingJob.isComplete());
+      assertTrue(renderingJob.isCompleted());
       assertNotNull(renderingJob.getVideo());
       assertNotNull(renderingJob.getStoryboard());
     }

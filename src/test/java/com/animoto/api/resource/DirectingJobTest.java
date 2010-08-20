@@ -4,15 +4,41 @@ import junit.framework.TestCase;
 
 import com.animoto.api.DirectingManifest;
 import com.animoto.api.enums.HttpCallbackFormat;
-import com.animoto.api.util.Factory;
+import com.animoto.api.util.DirectingManifestFactory;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
 public class DirectingJobTest extends TestCase {
+  DirectingJob directingJob = null;
+
+  public void setUp() {
+    directingJob = new DirectingJob();
+  }
+
+  public void testIsComplete() {
+    directingJob.setState("completed");
+    assertTrue(directingJob.isCompleted());
+    assertFalse(directingJob.isPending());
+    assertFalse(directingJob.isFailed());
+  }
+
+  public void testIsFailed() {
+    directingJob.setState("failed");
+    assertTrue(directingJob.isFailed());
+    assertFalse(directingJob.isCompleted());
+    assertFalse(directingJob.isPending());
+  }
+
+  public void testIsPending() {
+    directingJob.setState("other");
+    assertTrue(directingJob.isPending());
+    assertFalse(directingJob.isCompleted());
+    assertFalse(directingJob.isFailed()); 
+  }
+
   public void testToJson() throws ParseException {
-    DirectingJob directingJob = new DirectingJob();
-    DirectingManifest directingManifest = Factory.newDirectingManifest();
+    DirectingManifest directingManifest = DirectingManifestFactory.newInstance();
     String json = null;
 
     directingJob.setHttpCallback("http://partner.com/callback");

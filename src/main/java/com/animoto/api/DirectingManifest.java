@@ -25,6 +25,10 @@ public class DirectingManifest {
     visuals = (Visual[]) list.toArray(new Visual[list.size()]);
   }
 
+  public void clearVisuals() {
+    visuals = new Visual[0];
+  }
+
   public Visual[] getVisuals() {
     return visuals;
   }

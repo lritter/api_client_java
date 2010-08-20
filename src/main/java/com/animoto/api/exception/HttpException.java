@@ -7,6 +7,10 @@ public class HttpException extends Exception {
     this.exception = exception;
   }
 
+  public Exception getException() {
+    return exception;
+  }
+
   public String toString() {
     return exception.toString();
   }

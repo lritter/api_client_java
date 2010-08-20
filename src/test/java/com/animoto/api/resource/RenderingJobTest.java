@@ -7,7 +7,7 @@ import com.animoto.api.RenderingManifest;
 import com.animoto.api.enums.HttpCallbackFormat;
 import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.util.GsonUtil;
-import com.animoto.api.util.Factory;
+import com.animoto.api.util.RenderingManifestFactory;
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
@@ -15,7 +15,7 @@ import org.json.simple.parser.*;
 public class RenderingJobTest extends TestCase {
   public void testToJson() throws ParseException {
     RenderingJob renderingJob = new RenderingJob();
-    RenderingManifest renderingManifest = Factory.newRenderingManifest(); 
+    RenderingManifest renderingManifest = RenderingManifestFactory.newInstance(); 
     String json;
 
     renderingJob.setHttpCallback("http://partner.com/some/callback");    
