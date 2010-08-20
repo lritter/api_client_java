@@ -18,8 +18,8 @@ public class RenderingJobTest extends TestCase {
     RenderingManifest renderingManifest = Factory.newRenderingManifest(); 
     String json;
 
-		renderingJob.setHttpCallback("http://partner.com/some/callback");    
-		renderingJob.setHttpCallbackFormat(HttpCallbackFormat.XML); 
+    renderingJob.setHttpCallback("http://partner.com/some/callback");    
+    renderingJob.setHttpCallbackFormat(HttpCallbackFormat.XML); 
 
     renderingJob.setRenderingManifest(renderingManifest);
     json = renderingJob.toJson();
@@ -42,18 +42,18 @@ public class RenderingJobTest extends TestCase {
     assertEquals("720p", jsonRenderingProfile.get("vertical_resolution"));
   } 
 
-	public void testErrorParsing() {
-		String json = "{\"response\":{\"status\":{\"code\":400,\"errors\":[{\"code\":\"PRESENCE\",\"message\":\"Vertical resolution can't be empty\"},{\"code\":\"ENUMERATION\",\"message\":\"Vertical resolution must be one of 180p, 240p, 360p, 480p, 720p, or 1080p\"},{\"code\":\"ENUMERATION\",\"message\":\"Framerate must be one of 12, 15, 24, or 30\"},{\"code\":\"PRESENCE\",\"message\":\"Format can't be empty\"},{\"code\":\"ENUMERATION\",\"message\":\"Format must be one of h264, h264-iphone, flv, or iso\"}]}}}";
-		RenderingJob renderingJob = new RenderingJob();
-		ApiResponse apiResponse = GsonUtil.create().fromJson(json, ApiResponse.class);
-		ApiError[] apiErrors = null;
+  public void testErrorParsing() {
+    String json = "{\"response\":{\"status\":{\"code\":400,\"errors\":[{\"code\":\"PRESENCE\",\"message\":\"Vertical resolution can't be empty\"},{\"code\":\"ENUMERATION\",\"message\":\"Vertical resolution must be one of 180p, 240p, 360p, 480p, 720p, or 1080p\"},{\"code\":\"ENUMERATION\",\"message\":\"Framerate must be one of 12, 15, 24, or 30\"},{\"code\":\"PRESENCE\",\"message\":\"Format can't be empty\"},{\"code\":\"ENUMERATION\",\"message\":\"Format must be one of h264, h264-iphone, flv, or iso\"}]}}}";
+    RenderingJob renderingJob = new RenderingJob();
+    ApiResponse apiResponse = GsonUtil.create().fromJson(json, ApiResponse.class);
+    ApiError[] apiErrors = null;
 
-		assertNotNull(apiResponse);
-		assertNotNull(apiResponse.getResponse());
-		assertNull(apiResponse.getResponse().getPayload());
-		assertNotNull(apiResponse.getResponse().getStatus());
-		apiErrors = apiResponse.getResponse().getStatus().getApiErrors();
-		assertNotNull(apiErrors);
-		assertEquals(5, apiErrors.length);
-	}
+    assertNotNull(apiResponse);
+    assertNotNull(apiResponse.getResponse());
+    assertNull(apiResponse.getResponse().getPayload());
+    assertNotNull(apiResponse.getResponse().getStatus());
+    apiErrors = apiResponse.getResponse().getStatus().getApiErrors();
+    assertNotNull(apiErrors);
+    assertEquals(5, apiErrors.length);
+  }
 }

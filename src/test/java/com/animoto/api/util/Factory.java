@@ -8,7 +8,7 @@ import com.animoto.api.visual.*;
 import com.animoto.api.enums.*;
 
 public class Factory {
-	public static DirectingManifest newDirectingManifest() {
+  public static DirectingManifest newDirectingManifest() {
     DirectingManifest directingManifest = new DirectingManifest();
     Image image = new Image();
     TitleCard titleCard = new TitleCard();
@@ -38,19 +38,19 @@ public class Factory {
     directingManifest.setTitle("My Animoto Video");
     directingManifest.setProducerName("Animoto");
     directingManifest.setPacing(Pacing.HALF);
-		return directingManifest;
-	}
+    return directingManifest;
+  }
 
-	public static RenderingManifest newRenderingManifest() {
-		RenderingManifest renderingManifest = new RenderingManifest();
-		RenderingProfile renderingProfile = new RenderingProfile();
+  public static RenderingManifest newRenderingManifest() {
+    RenderingManifest renderingManifest = new RenderingManifest();
+    RenderingProfile renderingProfile = new RenderingProfile();
 
-		renderingProfile.setFramerate(new Float(30));
+    renderingProfile.setFramerate(new Float(30));
     renderingProfile.setFormat(Format.H264);
     renderingProfile.setVerticalResolution(VerticalResolution.VR_720P);
 
     renderingManifest.setRenderingProfile(renderingProfile);
     renderingManifest.setStoryboardUrl("http://animoto.com/storyboard/123");
-		return renderingManifest;
-	}
+    return renderingManifest;
+  }
 }

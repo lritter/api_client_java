@@ -35,27 +35,27 @@ public class ApiClientIntegrationTest extends TestCase {
     apiClient = new ApiClient("bb0d0e005ac4012dc17712313b013462", "c0fe4cfca8bf544b8d0e687247a600ef55ff82e3");
   }
 
-	public void testirecting() {
-		createDirectingJob();
-	}
+  public void testirecting() {
+    createDirectingJob();
+  }
 
-	public void testStoryboard() {
-		DirectingJob directingJob = createDirectingJob();
-		Storyboard storyboard = directingJob.getStoryboard();
+  public void testStoryboard() {
+    DirectingJob directingJob = createDirectingJob();
+    Storyboard storyboard = directingJob.getStoryboard();
 
-		try {
-			apiClient.reload(storyboard);
-			assertNotNull(storyboard.getLinks());
-			assertTrue(storyboard.getLinks().size() > 0);
-			assertNotNull(storyboard.getMetadata());
-			assertTrue(storyboard.getMetadata().size() > 0);
-		}
-		catch (Exception e) {
-			fail(e.toString());
-		}
-	}
+    try {
+      apiClient.reload(storyboard);
+      assertNotNull(storyboard.getLinks());
+      assertTrue(storyboard.getLinks().size() > 0);
+      assertNotNull(storyboard.getMetadata());
+      assertTrue(storyboard.getMetadata().size() > 0);
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+  }
 
-	public void testRenderingError() throws Exception {
+  public void testRenderingError() throws Exception {
     DirectingJob directingJob = createDirectingJob();
     RenderingJob renderingJob = null;
     RenderingManifest renderingManifest = new RenderingManifest();
@@ -64,25 +64,25 @@ public class ApiClientIntegrationTest extends TestCase {
     renderingProfile.setFramerate(new Float(1.23));
     renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
     renderingManifest.setRenderingProfile(renderingProfile);
-		try {
+    try {
       renderingJob = apiClient.render(renderingManifest);
-			fail("Expected error from API!");
-		}
-		catch (HttpExpectationException e) {
-			assertEquals(201, e.getExpectedCode());
-			assertEquals(400, e.getReceivedCode());
-			assertNotNull(e.getApiErrors());
-			assertNotNull(e.getBody());
-			assertEquals(5, e.getApiErrors().length);
-		}
-		catch (Exception e) {
-			throw e;
-		}
-	}
+      fail("Expected error from API!");
+    }
+    catch (HttpExpectationException e) {
+      assertEquals(201, e.getExpectedCode());
+      assertEquals(400, e.getReceivedCode());
+      assertNotNull(e.getApiErrors());
+      assertNotNull(e.getBody());
+      assertEquals(5, e.getApiErrors().length);
+    }
+    catch (Exception e) {
+      throw e;
+    }
+  }
 
-	public void testRenderingJob() {
-		createRenderingJob();
-	}
+  public void testRenderingJob() {
+    createRenderingJob();
+  }
 
   public void testVideo() {
     RenderingJob renderingJob = createRenderingJob();
@@ -99,26 +99,26 @@ public class ApiClientIntegrationTest extends TestCase {
     }
   }
 
-	public void testDirectingAndRendering() {
-		DirectingAndRenderingJob directingAndRenderingJob;
-		DirectingManifest directingManifest = Factory.newDirectingManifest();
-		RenderingManifest renderingManifest = Factory.newRenderingManifest();
+  public void testDirectingAndRendering() {
+    DirectingAndRenderingJob directingAndRenderingJob;
+    DirectingManifest directingManifest = Factory.newDirectingManifest();
+    RenderingManifest renderingManifest = Factory.newRenderingManifest();
 
-		try {
-			directingAndRenderingJob = apiClient.directAndRender(directingManifest, renderingManifest);
-			assertTrue(directingAndRenderingJob.isPending());
-			while(directingAndRenderingJob.isPending()) {
-				sleep(3000);
-				apiClient.reload(directingAndRenderingJob);
-			}
-			assertTrue(directingAndRenderingJob.isComplete());
-			assertNotNull(directingAndRenderingJob.getStoryboard());
-			assertNotNull(directingAndRenderingJob.getVideo());
-		}
-		catch (Exception e) {
-			fail(e.toString());
-		}
-	}
+    try {
+      directingAndRenderingJob = apiClient.directAndRender(directingManifest, renderingManifest);
+      assertTrue(directingAndRenderingJob.isPending());
+      while(directingAndRenderingJob.isPending()) {
+        sleep(3000);
+        apiClient.reload(directingAndRenderingJob);
+      }
+      assertTrue(directingAndRenderingJob.isComplete());
+      assertNotNull(directingAndRenderingJob.getStoryboard());
+      assertNotNull(directingAndRenderingJob.getVideo());
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+  }
 
   protected DirectingJob createDirectingJob() {
     DirectingManifest directingManifest = Factory.newDirectingManifest();
@@ -137,13 +137,13 @@ public class ApiClientIntegrationTest extends TestCase {
       while(directingJob.isPending()) {
         sleep(3000);
         apiClient.reload(directingJob);
-				assertFalse(directingJob.isFailed());
+        assertFalse(directingJob.isFailed());
       }
 
       // Job is complete!
       assertTrue(directingJob.isComplete());
       assertNotNull(directingJob.getStoryboard());
-			assertNotNull(directingJob.getResponse());
+      assertNotNull(directingJob.getResponse());
       assertNotNull(directingJob.getStoryboard().getLocation());
     }
     catch (Exception e) {
@@ -152,30 +152,30 @@ public class ApiClientIntegrationTest extends TestCase {
     return directingJob;
   }
 
-	protected RenderingJob createRenderingJob() {
-		DirectingJob directingJob = createDirectingJob();	
-		RenderingJob renderingJob = null;
-		RenderingManifest renderingManifest = Factory.newRenderingManifest();
-	
-		try {
-			renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
-			renderingJob = apiClient.render(renderingManifest);	
-			assertTrue(renderingJob.isPending());
-			assertNotNull(renderingJob.getLocation());
-			assertNotNull(renderingJob.getRequestId());
-			while(renderingJob.isPending()) {
-				sleep(3000);
-				apiClient.reload(renderingJob);
-			}
-			assertTrue(renderingJob.isComplete());
-			assertNotNull(renderingJob.getVideo());
-			assertNotNull(renderingJob.getStoryboard());
-		}
-		catch (Exception e) {
-			fail(e.toString());
-		}
-		return renderingJob;
-	}
+  protected RenderingJob createRenderingJob() {
+    DirectingJob directingJob = createDirectingJob(); 
+    RenderingJob renderingJob = null;
+    RenderingManifest renderingManifest = Factory.newRenderingManifest();
+  
+    try {
+      renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
+      renderingJob = apiClient.render(renderingManifest); 
+      assertTrue(renderingJob.isPending());
+      assertNotNull(renderingJob.getLocation());
+      assertNotNull(renderingJob.getRequestId());
+      while(renderingJob.isPending()) {
+        sleep(3000);
+        apiClient.reload(renderingJob);
+      }
+      assertTrue(renderingJob.isComplete());
+      assertNotNull(renderingJob.getVideo());
+      assertNotNull(renderingJob.getStoryboard());
+    }
+    catch (Exception e) {
+      fail(e.toString());
+    }
+    return renderingJob;
+  }
 
   private void sleep(int time) {
     try {
@@ -184,23 +184,23 @@ public class ApiClientIntegrationTest extends TestCase {
     catch (Exception ignored) {}
   }
 
-	private void print(BaseResource baseResource) {
-		StringBuffer buf = new StringBuffer();
-		String key;
-		Iterator it = null;
+  private void print(BaseResource baseResource) {
+    StringBuffer buf = new StringBuffer();
+    String key;
+    Iterator it = null;
 
-		buf.append("@" + new java.util.Date().toString() + "\n");
-		buf.append("------------------------------------------------------------\n");
-		buf.append("request id: " + baseResource.getRequestId() + "\n");
-		buf.append("state: " + baseResource.getState() + "\n");
-		buf.append("location: " + baseResource.getLocation() + "\n");
-		buf.append("current links\n");
-		buf.append("-------------\n");
-		it = baseResource.getLinks().keySet().iterator();
-		while (it.hasNext()) {
-			key = (String) it.next();
-			buf.append(key + ": " + baseResource.getLinks().get(key) + "\n");	
-		}
-		System.out.println(buf.toString());
-	}
+    buf.append("@" + new java.util.Date().toString() + "\n");
+    buf.append("------------------------------------------------------------\n");
+    buf.append("request id: " + baseResource.getRequestId() + "\n");
+    buf.append("state: " + baseResource.getState() + "\n");
+    buf.append("location: " + baseResource.getLocation() + "\n");
+    buf.append("current links\n");
+    buf.append("-------------\n");
+    it = baseResource.getLinks().keySet().iterator();
+    while (it.hasNext()) {
+      key = (String) it.next();
+      buf.append(key + ": " + baseResource.getLinks().get(key) + "\n"); 
+    }
+    System.out.println(buf.toString());
+  }
 }

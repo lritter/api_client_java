@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
 
-	private DirectingManifest directingManifest;
-	private RenderingManifest renderingManifest;
+  private DirectingManifest directingManifest;
+  private RenderingManifest renderingManifest;
 
   public String getContentType() {
     return "application/vnd.animoto.directing_and_rendering_manifest-v1+json";
@@ -23,21 +23,21 @@ public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
     return "application/vnd.animoto.directing_and_rendering_job-v1+json";
   }
 
-	public void setDirectingManifest(DirectingManifest directingManifest) {
-		this.directingManifest = directingManifest;
-	}
+  public void setDirectingManifest(DirectingManifest directingManifest) {
+    this.directingManifest = directingManifest;
+  }
 
-	public DirectingManifest getDirectingManifest() {
-		return directingManifest;
-	}
+  public DirectingManifest getDirectingManifest() {
+    return directingManifest;
+  }
 
-	public void setRenderingManifest(RenderingManifest renderingManifest) {
-		this.renderingManifest = renderingManifest;
-	}
+  public void setRenderingManifest(RenderingManifest renderingManifest) {
+    this.renderingManifest = renderingManifest;
+  }
 
-	public RenderingManifest getRenderingManifest() {
-		return renderingManifest;
-	}
+  public RenderingManifest getRenderingManifest() {
+    return renderingManifest;
+  }
 
   public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
     super.handleHttpResponse(httpResponse, expectedStatusCode);
@@ -45,15 +45,15 @@ public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
     populateVideo();
   }
 
-	public String toJson() {
-		return newGson().toJson(new Container(this));
-	}
+  public String toJson() {
+    return newGson().toJson(new Container(this));
+  }
 
-	private class Container {
-		private DirectingAndRenderingJob directingAndRenderingJob;
+  private class Container {
+    private DirectingAndRenderingJob directingAndRenderingJob;
 
-		public Container(DirectingAndRenderingJob directingAndRenderingJob) {
-			this.directingAndRenderingJob = directingAndRenderingJob;
-		}
-	}
+    public Container(DirectingAndRenderingJob directingAndRenderingJob) {
+      this.directingAndRenderingJob = directingAndRenderingJob;
+    }
+  }
 }

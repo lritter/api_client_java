@@ -7,32 +7,32 @@ public class HttpExpectationException extends ApiException {
   private int receivedCode;
   private int expectedCode;
   private String body;
-	private ApiError[] apiErrors; 
+  private ApiError[] apiErrors; 
 
   public HttpExpectationException(int receivedCode, int expectedCode, String body, Status status) {
     this.receivedCode = receivedCode;
     this.body = body;
     this.expectedCode = expectedCode;
-		this.apiErrors = status.getApiErrors();
+    this.apiErrors = status.getApiErrors();
   }
 
   public String toString() {
     return "received [" + receivedCode + "] instead of [" + expectedCode + "] with body [" + body + "]";
   }
 
-	public int getReceivedCode() {
-		return receivedCode;
-	}
+  public int getReceivedCode() {
+    return receivedCode;
+  }
 
-	public int getExpectedCode() {
-		return expectedCode;
-	}	
+  public int getExpectedCode() {
+    return expectedCode;
+  } 
 
-	public String getBody() {
-		return this.body;
-	}
+  public String getBody() {
+    return this.body;
+  }
 
-	public ApiError[] getApiErrors() {
-		return apiErrors;
-	}
+  public ApiError[] getApiErrors() {
+    return apiErrors;
+  }
 }

@@ -11,15 +11,15 @@ import org.apache.http.HttpResponse;
 
 public class RenderingJob extends BaseResource implements Jsonable {
   private RenderingManifest renderingManifest;
-	private Video video;
+  private Video video;
 
-	public String getContentType() {
-		return "application/vnd.animoto.rendering_manifest-v1+json";
-	}
+  public String getContentType() {
+    return "application/vnd.animoto.rendering_manifest-v1+json";
+  }
 
-	public String getAccept() {
-		return "application/vnd.animoto.rendering_job-v1+json";
-	}
+  public String getAccept() {
+    return "application/vnd.animoto.rendering_job-v1+json";
+  }
 
   public void setRenderingManifest(RenderingManifest renderingManifest) {
     this.renderingManifest = renderingManifest;
@@ -35,8 +35,8 @@ public class RenderingJob extends BaseResource implements Jsonable {
 
   public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
     super.handleHttpResponse(httpResponse, expectedStatusCode);
-		populateStoryboard();
-		populateVideo();
+    populateStoryboard();
+    populateVideo();
   }
 
   /**
