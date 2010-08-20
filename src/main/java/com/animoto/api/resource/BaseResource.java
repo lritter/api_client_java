@@ -76,11 +76,11 @@ public abstract class BaseResource implements Resource {
   }
 
   public boolean isPending() {
-    return !("completed".equals(state));
+    return !isFailed() && !isComplete();
   }
 
   public boolean isComplete() {
-    return !isPending();
+    return "completed".equals(state);
   }
 
   public void setLinks(Map<String, String> links) {

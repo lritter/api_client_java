@@ -62,7 +62,7 @@ public class ApiClientIntegrationTest extends TestCase {
     RenderingProfile renderingProfile = new RenderingProfile();
  
     renderingProfile.setFramerate(new Float(1.23));
-    renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
+    renderingManifest.setStoryboard(directingJob.getStoryboard());
     renderingManifest.setRenderingProfile(renderingProfile);
     try {
       renderingJob = apiClient.render(renderingManifest);
@@ -158,7 +158,7 @@ public class ApiClientIntegrationTest extends TestCase {
     RenderingManifest renderingManifest = Factory.newRenderingManifest();
   
     try {
-      renderingManifest.setStoryboardUrl(directingJob.getStoryboard().getUrl());
+      renderingManifest.setStoryboard(directingJob.getStoryboard());
       renderingJob = apiClient.render(renderingManifest); 
       assertTrue(renderingJob.isPending());
       assertNotNull(renderingJob.getLocation());
