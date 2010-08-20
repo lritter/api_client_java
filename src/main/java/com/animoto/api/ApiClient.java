@@ -71,7 +71,7 @@ public class ApiClient {
 
     directingJob.setDirectingManifest(directingManifest);
     httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
-		try {
+    try {
       directingJob.handleHttpResponse(httpResponse, 201);
     }
     catch (IOException e) {
@@ -80,50 +80,50 @@ public class ApiClient {
     return directingJob; 
   }
 
-	/**
- 	 *
+  /**
+   *
    */
-	public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
-		return render(renderingManifest, null, null);
-	}
+  public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+    return render(renderingManifest, null, null);
+  }
 
-	/**
- 	 *
- 	 */
-	public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
-		RenderingJob renderingJob = new RenderingJob();
-		HttpResponse httpResponse;
+  /**
+   *
+   */
+  public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+    RenderingJob renderingJob = new RenderingJob();
+    HttpResponse httpResponse;
 
-		renderingJob.setRenderingManifest(renderingManifest);
-		httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
-		try {
-			renderingJob.handleHttpResponse(httpResponse, 201);
-		}
-		catch (IOException e) {
-			throw new HttpException(e);
-		}	
-		return renderingJob;
-	}
-
-
-	/**
- 	 *
- 	 */
-	public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
-		return directAndRender(directingManifest, renderingManifest, null, null);
-	}
+    renderingJob.setRenderingManifest(renderingManifest);
+    httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
+    try {
+      renderingJob.handleHttpResponse(httpResponse, 201);
+    }
+    catch (IOException e) {
+      throw new HttpException(e);
+    } 
+    return renderingJob;
+  }
 
 
-	/**
- 	 *
- 	 */
-	public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
-		DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
-		HttpResponse httpResponse;
+  /**
+   *
+   */
+  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+    return directAndRender(directingManifest, renderingManifest, null, null);
+  }
 
-		directingAndRenderingJob.setDirectingManifest(directingManifest);
-		directingAndRenderingJob.setRenderingManifest(renderingManifest);
-		renderingManifest.setStoryboardUrl(null);
+
+  /**
+   *
+   */
+  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+    DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
+    HttpResponse httpResponse;
+
+    directingAndRenderingJob.setDirectingManifest(directingManifest);
+    directingAndRenderingJob.setRenderingManifest(renderingManifest);
+    renderingManifest.setStoryboardUrl(null);
     httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
     try {
       directingAndRenderingJob.handleHttpResponse(httpResponse, 201);
@@ -132,7 +132,7 @@ public class ApiClient {
       throw new HttpException(e);
     }
     return directingAndRenderingJob;
-	}
+  }
 
   /**
    *
@@ -144,7 +144,7 @@ public class ApiClient {
     try {
       headers.put("Accept", resource.getAccept());
       httpResponse = doHttpGet(resource.getLocation(), headers);
-			((BaseResource) resource).handleHttpResponse(httpResponse, 200);
+      ((BaseResource) resource).handleHttpResponse(httpResponse, 200);
     }
     catch (IOException e) {
       throw new HttpException(e);
@@ -162,7 +162,7 @@ public class ApiClient {
     return doHttpRequest(httpPost, headers);
   }
 
-	private HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
+  private HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
     HttpResponse httpResponse = null;
     Map<String, String> headers = new HashMap<String, String>();
 
@@ -182,8 +182,8 @@ public class ApiClient {
     catch (IOException e) {
       throw new HttpException(e);
     }
-		return httpResponse;
-	}
+    return httpResponse;
+  }
 
   private HttpResponse doHttpRequest(HttpRequestBase httpRequestBase, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
     UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(key, secret);
