@@ -55,7 +55,7 @@ public class HttpExpectationException extends ApiException {
   }
 
   /**
-   * Get An array of API errors that were collected from the response body, if any.
+   * Get an array of API errors that were collected from the response body, if any.
    *
    * @return ApiError[]
    */
