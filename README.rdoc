@@ -61,15 +61,9 @@ http://hc.apache.org/httpcomponents-client-4.0.1/logging.html
 
 === Command Line Interface (CLI)
 
-A small CLI application is provided to help you run the API on the command line. Assuming you have generated a JAR with all dependencies (and you just don't like using curl on the command line), you can run the CLI as follows:
+A small CLI application is provided to help you run the API on the command line. Assuming you have generated a JAR with all dependencies (and you just don't like using curl on the command line), you can run the CLI with a utility shell script that sets the classpath and executes the CLI class:
 
-==== Serializing files to the CLI
-
-It may be cumbersome to write JSON into your command line. In this case, you can serialize your files straight to the CLI by running the following Unix commands:
-
-more your_file.json | xargs ./cli.sh -cd
-
-This will send the contents of your_file.json into the CLI to create a directing job.
+./cli.sh --help 
 
 == Coding Examples
 
