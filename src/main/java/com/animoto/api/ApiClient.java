@@ -45,7 +45,7 @@ import java.io.UnsupportedEncodingException;
 public class ApiClient {
   private String key;
   private String secret;
-  private String apiHost = "https://api2-staging.animoto.com";
+  private String host = "https://api2-staging.animoto.com";
 
   /**
    * Default constructor. You will need to set a key and secret.
@@ -80,12 +80,12 @@ public class ApiClient {
     return secret;
   }
 
-  public void setApiHost(String apiHost) {
-    this.apiHost = apiHost;
+  public void setHost(String host) {
+    this.host = host;
   }
 
-  public String getApiHost() {
-    return apiHost;
+  public String getHost() {
+    return host;
   }
 
   /**
@@ -241,7 +241,7 @@ public class ApiClient {
     try {
       headers.put("Content-Type", baseResource.getContentType());
       headers.put("Accept", baseResource.getAccept());
-      httpResponse = doHttpPost(apiHost + "/jobs/" + context, ((Jsonable) baseResource).toJson(), headers);
+      httpResponse = doHttpPost(host + "/jobs/" + context, ((Jsonable) baseResource).toJson(), headers);
     }
     catch (IOException e) {
       throw new HttpException(e);

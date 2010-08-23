@@ -32,7 +32,7 @@ public class ApiClientIntegrationTest extends TestCase {
   protected ApiClient apiClient = null;
 
   public void setUp() {
-    apiClient = new ApiClient("bb0d0e005ac4012dc17712313b013462", "c0fe4cfca8bf544b8d0e687247a600ef55ff82e3");
+    apiClient = ApiClientFactory.newInstance();
   }
 
   public void testDirecting() {
@@ -41,7 +41,7 @@ public class ApiClientIntegrationTest extends TestCase {
 
   public void testHttpExceptionThrownOnNetworkIssues() {
     try {
-      apiClient.setApiHost("http://nowhere.com");
+      apiClient.setHost("http://nowhere.com");
       apiClient.direct(DirectingManifestFactory.newInstance());
       fail("Expected exception to be thrown!");
     }

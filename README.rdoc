@@ -27,7 +27,7 @@ The project uses the basic Maven tasks:
 * mvn test - Run all unit tests for the library.
 * mvn package - Create a JAR file of the library.
 * mvn javadoc:javadoc - Generate Javadoc documentation locally.
-* mvn assembly:assembly - Generate one uber-JAR with all dependencies in the JAR. This is useful running the CLI interface.
+* mvn assembly:assembly - Generate one uber-JAR with all dependencies in the JAR. This is useful for running the CLI interface.
 
 == Dependencies
 
@@ -36,6 +36,7 @@ The Animoto API Client uses the following libraries:
 * Apache Commons Bean Utils (http://commons.apache.org/beanutils)
 * Apache Http Client 4.x (http://hc.apache.org/httpcomponents-client)
 * Google Gson (http://code.google.com/p/google-gson)
+* Apache Commons CLI (http://commons.apache.org/cli)
 
 For testing, the following is used to verify JSON results:
 
@@ -49,7 +50,7 @@ By default when you run tests, only the unit tests are run. If you want to run t
 
   mvn -Dtest=ApiClientIntegrationTest test
 
-You will need to have network connectivity for the integration test to work. The API credentials currently used are specific to the sample testing. Do not use them for your own account.
+You will need to have network connectivity for the integration test to work. The integration test uses the ApiClientFactory which reads credentials from the animoto_api_client.properties. Please edit this file under src/test/resources, to add your own credentials.
 
 == Help 
 
