@@ -171,9 +171,15 @@ public class ApiClient {
     return directAndRender(directingManifest, renderingManifest, null, null);
   }
 
-
   /**
+   * Creates a DirectingAndRendering job from the API.
    *
+   * @param       directingManifest             The manifest payload to direct.
+   * @param       renderingManifest             The manifest payload to render. 
+   * @param       httpCallback                  The callback URL the API will communicate back to. 
+   * @param       httpCallbackFormat            The payload type when the callback is made.
+   * @exception   HttpExpectationException
+   * @exception   HttpExpectation
    */
   public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
@@ -215,18 +221,18 @@ public class ApiClient {
     } 
   }
 
-  protected HttpResponse doHttpGet(String url, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
+  private HttpResponse doHttpGet(String url, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
     HttpGet httpGet = new HttpGet(url);
     return doHttpRequest(httpGet, headers);
   }
 
-  protected HttpResponse doHttpPost(String url, String postBody, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
+  private HttpResponse doHttpPost(String url, String postBody, Map<String, String> headers) throws IOException, UnsupportedEncodingException {
     HttpPost httpPost = new HttpPost(url);
     httpPost.setEntity(new StringEntity(postBody));
     return doHttpRequest(httpPost, headers);
   }
 
-  protected HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
+  private HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
     HttpResponse httpResponse = null;
     Map<String, String> headers = new HashMap<String, String>();
 
