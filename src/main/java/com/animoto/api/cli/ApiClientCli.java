@@ -1,12 +1,12 @@
 package com.animoto.api.cli;
 
 import com.animoto.api.ApiClient;
-import com.animoto.api.DirectingManifest;
 import com.animoto.api.util.FileUtil;
 import com.animoto.api.util.StringUtil;
 
 import com.animoto.api.resource.BaseResource;
 import com.animoto.api.resource.DirectingJob;
+import com.animoto.api.resource.Storyboard;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -17,15 +17,18 @@ import org.apache.commons.cli.HelpFormatter;
 
 public class ApiClientCli extends ApiClient {
 
+  private static ApiClientCli apiClient = null;
+
   public static void main(String[] args) throws Exception {
-    ApiClientCli apiClient = null;
     CommandLineParser parser = new PosixParser();
     Options options = getOptions();
     CommandLine commandLine = null;
     String value = null;
     String data = null;
-    DirectingManifest directingManifest = null;
+    DirectingJob directingJob = null;
+    Storyboard storyboard = null;
     RawDirectingJob rawDirectingJob = null;
+    RawRenderingJob rawRenderingJob = null;
     String key, secret;
 
     try {
@@ -49,10 +52,35 @@ public class ApiClientCli extends ApiClient {
         apiClient.direct(rawDirectingJob, null, null);
         rawDirectingJob.prettyPrintToSystem();
       }
+      else if (commandLine.hasOption("create-rendering-job")) {
+        value = commandLine.getOptionValue("create-rendering-job");
+        rawRenderingJob = new RawRenderingJob(FileUtil.readFile(value));
+        apiClient.render(rawRenderingJob, null, null);
+        rawRenderingJob.prettyPrintToSystem();
+      }
+      else if (commandLine.hasOption("storyboard")) {
+        doApiGet("Storyboard", commandLine.getOptionValue("storyboard"));
+      }
+      else if (commandLine.hasOption("directing-job")) {
+        doApiGet("DirectingJob", commandLine.getOptionValue("directing-job"));
+      }
+      else if (commandLine.hasOption("rendering-job")) {
+        doApiGet("RenderingJob", commandLine.getOptionValue("rendering-job"));
+      }
+      else if (commandLine.hasOption("video")) {
+        doApiGet("Video", commandLine.getOptionValue("video"));
+      }
     }
     catch (Exception e) {
       throw e;
     }
+  }
+
+  private static void doApiGet(String clazzName, String url) throws Exception {
+    BaseResource resource = (BaseResource) Class.forName("com.animoto.api.resource." + clazzName).newInstance();
+    resource.setUrl(url);
+    apiClient.reload(resource);
+    resource.prettyPrintToSystem();
   }
 
   private static Options getOptions() {

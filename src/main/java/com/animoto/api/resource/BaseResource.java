@@ -55,8 +55,16 @@ public abstract class BaseResource implements Resource {
     return httpCallbackFormat;
   }
 
+  public void setUrl(String url) {
+    setLocation(url);
+  }
+
   public String getUrl() {
     return getLocation();
+  }
+
+  public void setLocation(String location) {
+    getLinks().put("self", location);
   }
 
   public String getLocation() {
@@ -99,6 +107,9 @@ public abstract class BaseResource implements Resource {
    * Get the related links of the resource from API.
    */
   public Map<String, String> getLinks() {
+    if (links == null) {
+      links = new HashMap<String, String>();
+    }
     return links;
   }
 
@@ -178,7 +189,7 @@ public abstract class BaseResource implements Resource {
   protected void populateStoryboard() {
     if (isCompleted()) {
       Storyboard storyboard = new Storyboard();
-      storyboard.getLinks().put("self", getLinks().get("storyboard"));
+      storyboard.setLocation(getLinks().get("storyboard"));
       setStoryboard(storyboard);
       if (storyboard.getLocation() == null) {
         throw new ContractError();

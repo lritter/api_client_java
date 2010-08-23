@@ -149,9 +149,13 @@ public class ApiClient {
    */
   public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     RenderingJob renderingJob = new RenderingJob();
-    HttpResponse httpResponse;
-
     renderingJob.setRenderingManifest(renderingManifest);
+    render(renderingJob, httpCallback, httpCallbackFormat);
+    return renderingJob;
+  }
+
+  protected void render(RenderingJob renderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+    HttpResponse httpResponse;
     httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
     try {
       renderingJob.handleHttpResponse(httpResponse, 201);
@@ -159,7 +163,6 @@ public class ApiClient {
     catch (IOException e) {
       throw new HttpException(e);
     } 
-    return renderingJob;
   }
 
 
