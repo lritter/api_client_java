@@ -23,6 +23,10 @@ public class Payload {
 		return renderingJob;
 	}
 
+  public RenderingJob getRawRenderingJob() {
+    return getRenderingJob();
+  }
+
 	public Storyboard getStoryboard() {
 		return storyboard;
 	}
@@ -33,6 +37,10 @@ public class Payload {
 
   public DirectingAndRenderingJob getDirectingAndRenderingJob() {
     return directingAndRenderingJob;
+  }
+
+  public DirectingAndRenderingJob getRawDirectingAndRenderingJob() {
+    return getDirectingAndRenderingJob();
   }
 
 	public BaseResource getBaseResource(Class clazz) {

@@ -4,8 +4,11 @@ import com.animoto.api.ApiClient;
 import com.animoto.api.util.FileUtil;
 import com.animoto.api.util.StringUtil;
 
+import com.animoto.api.resource.Resource;
 import com.animoto.api.resource.BaseResource;
 import com.animoto.api.resource.DirectingJob;
+import com.animoto.api.resource.RenderingJob;
+import com.animoto.api.resource.DirectingAndRenderingJob;
 import com.animoto.api.resource.Storyboard;
 
 import org.apache.commons.cli.Option;
@@ -29,6 +32,7 @@ public class ApiClientCli extends ApiClient {
     Storyboard storyboard = null;
     RawDirectingJob rawDirectingJob = null;
     RawRenderingJob rawRenderingJob = null;
+    RawDirectingAndRenderingJob rawDirectingAndRenderingJob = null;
     String key, secret;
 
     try {
@@ -47,16 +51,25 @@ public class ApiClientCli extends ApiClient {
       apiClient.setSecret(secret);
 
       if (commandLine.hasOption("create-directing-job")) {
-        value = commandLine.getOptionValue("create-directing-job");
-        rawDirectingJob = new RawDirectingJob(FileUtil.readFile(value));
-        apiClient.direct(rawDirectingJob, null, null);
-        rawDirectingJob.prettyPrintToSystem();
+        doApiPost(new RawDirectingJob(), commandLine.getOptionValue("create-directing-job"), new PostCliCallback() {
+          public void doCallback(Resource resource) throws Exception {
+            apiClient.direct((DirectingJob) resource, null, null);
+          }
+        });
       }
       else if (commandLine.hasOption("create-rendering-job")) {
-        value = commandLine.getOptionValue("create-rendering-job");
-        rawRenderingJob = new RawRenderingJob(FileUtil.readFile(value));
-        apiClient.render(rawRenderingJob, null, null);
-        rawRenderingJob.prettyPrintToSystem();
+        doApiPost(new RawRenderingJob(), commandLine.getOptionValue("create-rendering-job"), new PostCliCallback() {
+          public void doCallback(Resource resource) throws Exception {
+            apiClient.render((RenderingJob) resource, null, null);
+          }
+        });
+      }
+      else if (commandLine.hasOption("create-directing-and-rendering-job")) {
+        doApiPost(new RawDirectingAndRenderingJob(), commandLine.getOptionValue("create-directing-and-rendering-job"), new PostCliCallback() {
+          public void doCallback(Resource resource) throws Exception {
+            apiClient.directAndRender((DirectingAndRenderingJob) resource, null, null);
+          }
+        });
       }
       else if (commandLine.hasOption("storyboard")) {
         doApiGet("Storyboard", commandLine.getOptionValue("storyboard"));
@@ -67,6 +80,9 @@ public class ApiClientCli extends ApiClient {
       else if (commandLine.hasOption("rendering-job")) {
         doApiGet("RenderingJob", commandLine.getOptionValue("rendering-job"));
       }
+      else if (commandLine.hasOption("directing-and-rendering-job")) {
+        doApiGet("DirectingAndRenderingJob", commandLine.getOptionValue("directing-and-rendering-job"));
+      }
       else if (commandLine.hasOption("video")) {
         doApiGet("Video", commandLine.getOptionValue("video"));
       }
@@ -74,6 +90,12 @@ public class ApiClientCli extends ApiClient {
     catch (Exception e) {
       throw e;
     }
+  }
+
+  private static void doApiPost(Raw raw, String file, PostCliCallback postCliCallback) throws Exception {
+    raw.setRawEntity(FileUtil.readFile(file));
+    postCliCallback.doCallback((Resource) raw);
+    ((BaseResource) raw).prettyPrintToSystem();
   }
 
   private static void doApiGet(String clazzName, String url) throws Exception {
@@ -91,9 +113,18 @@ public class ApiClientCli extends ApiClient {
     options.addOption("v", "video", true, "The video URL you want to GET.");
     options.addOption("r", "rendering-job", true, "The rendering job URL you want to GET.");
     options.addOption("d", "directing-job", true, "The directing job URL you want to GET.");
-    options.addOption("cr", "create-rendering-job", true, "The file with JSON payload you want to POST to API to crate a rendering job.");
-    options.addOption("cd", "create-directing-job", true, "The file with JSON payload you want to POST to API to crate a directing job.");
+    options.addOption("dr", "directing-and-rendering-job", true, "The directing_and_rendering job URL you want to GET");
+    options.addOption("cr", "create-rendering-job", true, "The file with JSON payload you want to POST to API to create a rendering job.");
+    options.addOption("cd", "create-directing-job", true, "The file with JSON payload you want to POST to API to create a directing job.");
+    options.addOption("cdr", "create-directing-and-rendering-job", true, "The file with JSON payload you want to POST to API to create a directing_and_rendering job");
     options.addOption("h", "help", false, "Print CLI help");
     return options;
+  }
+
+  /**
+   * Anonymous interface for anonymous objects.
+   */
+  interface PostCliCallback {
+    public void doCallback(Resource resource) throws Exception;
   }
 }

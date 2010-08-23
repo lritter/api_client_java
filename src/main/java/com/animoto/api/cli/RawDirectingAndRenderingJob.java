@@ -1,8 +1,8 @@
 package com.animoto.api.cli;
 
-import com.animoto.api.resource.RenderingJob;
+import com.animoto.api.resource.DirectingAndRenderingJob;
 
-public class RawRenderingJob extends RenderingJob implements Raw {
+public class RawDirectingAndRenderingJob extends DirectingAndRenderingJob implements Raw {
   private String rawJson;
 
   public void setRawEntity(String rawEntity) {

@@ -117,8 +117,7 @@ public class ApiClient {
   }
 
   protected void direct(DirectingJob directingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
-    HttpResponse httpResponse;
-    httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
+    HttpResponse httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
     try {
       directingJob.handleHttpResponse(httpResponse, 201);
     }
@@ -155,8 +154,7 @@ public class ApiClient {
   }
 
   protected void render(RenderingJob renderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
-    HttpResponse httpResponse;
-    httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
+    HttpResponse httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
     try {
       renderingJob.handleHttpResponse(httpResponse, 201);
     }
@@ -179,19 +177,21 @@ public class ApiClient {
    */
   public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
-    HttpResponse httpResponse;
-
     directingAndRenderingJob.setDirectingManifest(directingManifest);
     directingAndRenderingJob.setRenderingManifest(renderingManifest);
     renderingManifest.setStoryboardUrl(null);
-    httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
+    directAndRender(directingAndRenderingJob, httpCallback, httpCallbackFormat); 
+    return directingAndRenderingJob;
+  }
+
+  protected void directAndRender(DirectingAndRenderingJob directingAndRenderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+    HttpResponse httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
     try {
       directingAndRenderingJob.handleHttpResponse(httpResponse, 201);
     }
     catch (IOException e) {
       throw new HttpException(e);
     }
-    return directingAndRenderingJob;
   }
 
   /**

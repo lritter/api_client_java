@@ -223,6 +223,7 @@ public abstract class BaseResource implements Resource {
     }
   }
 
+  private static final String BREAK = "------------------------------------------------------------\n";
   /**
    * Utility method to print this Resource to STDOUT.
    */
@@ -231,20 +232,20 @@ public abstract class BaseResource implements Resource {
     String key;
     Iterator it = null;
 
-    buf.append("@" + new java.util.Date().toString() + "\n");
-    buf.append("------------------------------------------------------------\n");
+    buf.append(this.getClass().getName() + " - " + new java.util.Date().toString() + "\n");
+    buf.append(BREAK);
     buf.append("request id: " + getRequestId() + "\n");
     buf.append("state: " + getState() + "\n");
     buf.append("location: " + getLocation() + "\n");
     buf.append("current links\n");
-    buf.append("-------------\n");
+    buf.append(BREAK);
     it = getLinks().keySet().iterator();
     while (it.hasNext()) {
       key = (String) it.next();
       buf.append(key + ": " + getLinks().get(key) + "\n");
     }
     buf.append("meta data\n");
-    buf.append("---------\n");
+    buf.append(BREAK);
     it = getMetadata().keySet().iterator();
     while (it.hasNext()) {
       key = (String) it.next();
