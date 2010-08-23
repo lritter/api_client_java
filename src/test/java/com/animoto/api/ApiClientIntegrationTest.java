@@ -35,7 +35,7 @@ public class ApiClientIntegrationTest extends TestCase {
     apiClient = new ApiClient("bb0d0e005ac4012dc17712313b013462", "c0fe4cfca8bf544b8d0e687247a600ef55ff82e3");
   }
 
-  public void testirecting() {
+  public void testDirecting() {
     createDirectingJob();
   }
 
@@ -222,25 +222,5 @@ public class ApiClientIntegrationTest extends TestCase {
       Thread.sleep(time);
     }
     catch (Exception ignored) {}
-  }
-
-  private void print(BaseResource baseResource) {
-    StringBuffer buf = new StringBuffer();
-    String key;
-    Iterator it = null;
-
-    buf.append("@" + new java.util.Date().toString() + "\n");
-    buf.append("------------------------------------------------------------\n");
-    buf.append("request id: " + baseResource.getRequestId() + "\n");
-    buf.append("state: " + baseResource.getState() + "\n");
-    buf.append("location: " + baseResource.getLocation() + "\n");
-    buf.append("current links\n");
-    buf.append("-------------\n");
-    it = baseResource.getLinks().keySet().iterator();
-    while (it.hasNext()) {
-      key = (String) it.next();
-      buf.append(key + ": " + baseResource.getLinks().get(key) + "\n"); 
-    }
-    System.out.println(buf.toString());
   }
 }

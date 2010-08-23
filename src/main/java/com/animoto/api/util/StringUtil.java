@@ -6,6 +6,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 public class StringUtil {
+  public static boolean isBlank(String s) {
+    if (s == null || s.trim().equals("")) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   public static String convertStreamToString(InputStream is) throws IOException {
     if (is != null) {
       StringBuilder sb = new StringBuilder();

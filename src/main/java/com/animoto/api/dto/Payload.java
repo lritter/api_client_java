@@ -15,6 +15,10 @@ public class Payload {
     return directingJob;
   }
 
+  public DirectingJob getRawDirectingJob() {
+    return getDirectingJob();
+  }
+
 	public RenderingJob getRenderingJob() {
 		return renderingJob;
 	}

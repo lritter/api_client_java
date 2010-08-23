@@ -1,6 +1,6 @@
 = Animoto API Client (Java)
 
-The Animoto API Client is a Java library to communicate with the Animoto API. To learn more about the API, visit:
+The Animoto API Client is a Java library to communicate with the Animoto API over JSON. To learn more about the API, visit:
 
 LINK_TO_ANIMOTO_API_HERE
 
@@ -27,6 +27,7 @@ The project uses the basic Maven tasks:
 * mvn test - Run all unit tests for the library.
 * mvn package - Create a JAR file of the library.
 * mvn javadoc:javadoc - Generate Javadoc documentation locally.
+* mvn assembly:assembly - Generate one uber-JAR with all dependencies in the JAR. This is useful running the CLI interface.
 
 == Dependencies
 
@@ -49,6 +50,26 @@ By default when you run tests, only the unit tests are run. If you want to run t
   mvn -Dtest=ApiClientIntegrationTest test
 
 You will need to have network connectivity for the integration test to work. The API credentials currently used are specific to the sample testing. Do not use them for your own account.
+
+== Help 
+
+=== Wire Logging
+
+You can use the built in features of Apache Http Client and Commons Loggin to view the network information between the Java API Client and the API. This will allow you to use your current logging framework, whatever it is, to view network information.
+
+http://hc.apache.org/httpcomponents-client-4.0.1/logging.html
+
+=== Command Line Interface (CLI)
+
+A small CLI application is provided to help you run the API on the command line. Assuming you have generated a JAR with all dependencies (and you just don't like using curl on the command line), you can run the CLI as follows:
+
+==== Serializing files to the CLI
+
+It may be cumbersome to write JSON into your command line. In this case, you can serialize your files straight to the CLI by running the following Unix commands:
+
+more your_file.json | xargs ./cli.sh -cd
+
+This will send the contents of your_file.json into the CLI to create a directing job.
 
 == Coding Examples
 

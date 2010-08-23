@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import java.io.IOException;
 
@@ -163,16 +164,13 @@ public abstract class BaseResource implements Resource {
     body = StringUtil.convertStreamToString(httpResponse.getEntity().getContent());
     apiResponse = newGson().fromJson(body, ApiResponse.class);
     if (statusCode != expectedStatusCode) {
-      throw new HttpExpectationException(statusCode, expectedStatusCode, body, apiResponse.getResponse().getStatus());
+      throw new HttpExpectationException(statusCode, expectedStatusCode, body, apiResponse);
     }
-
     response = apiResponse.getResponse();
     dtoBaseResource = apiResponse.getResponse().getPayload().getBaseResource(this.getClass());
-    
     doErrorableBeanCopy(dtoBaseResource);
     setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
-
-    if (getLocation() == null) {
+    if (getLocation() == null ||  StringUtil.isBlank(getLocation())) {
       throw new ContractError();
     }
   }
@@ -204,13 +202,43 @@ public abstract class BaseResource implements Resource {
       BeanUtils.copyProperties(this, bean);
     }
     catch (IllegalAccessException e) {
-      throw new Error();
+      throw new Error(e.toString());
     }
     catch (IllegalArgumentException e) {
-      throw new Error();
+      throw new Error(e.toString());
     }
     catch (InvocationTargetException e) {
-      throw new Error();
+      throw new Error(e.toString());
     }
+  }
+
+  /**
+   * Utility method to print this Resource to STDOUT.
+   */
+  public void prettyPrintToSystem() {
+    StringBuffer buf = new StringBuffer();
+    String key;
+    Iterator it = null;
+
+    buf.append("@" + new java.util.Date().toString() + "\n");
+    buf.append("------------------------------------------------------------\n");
+    buf.append("request id: " + getRequestId() + "\n");
+    buf.append("state: " + getState() + "\n");
+    buf.append("location: " + getLocation() + "\n");
+    buf.append("current links\n");
+    buf.append("-------------\n");
+    it = getLinks().keySet().iterator();
+    while (it.hasNext()) {
+      key = (String) it.next();
+      buf.append(key + ": " + getLinks().get(key) + "\n");
+    }
+    buf.append("meta data\n");
+    buf.append("---------\n");
+    it = getMetadata().keySet().iterator();
+    while (it.hasNext()) {
+      key = (String) it.next();
+      buf.append(key + ": " + getMetadata().get(key) + "\n");
+    }
+    System.out.println(buf.toString());
   }
 }

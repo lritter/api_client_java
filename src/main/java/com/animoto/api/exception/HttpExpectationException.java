@@ -1,7 +1,9 @@
 package com.animoto.api.exception;
 
 import com.animoto.api.ApiError;
+import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.dto.Status;
+import com.animoto.api.dto.Response;
 
 /**
  * This exception is thrown whenever a RESTFUL contract between the client and the API is broken with respect to HTTP status codes.<p/>
@@ -12,14 +14,19 @@ public class HttpExpectationException extends ApiException {
   private int receivedCode;
   private int expectedCode;
   private String body;
+  private ApiResponse apiResponse;
   private ApiError[] apiErrors; 
+  private Response response;
 
-  public HttpExpectationException(int receivedCode, int expectedCode, String body, Status status) {
+  public HttpExpectationException(int receivedCode, int expectedCode, String body, ApiResponse apiResponse) {
     this.receivedCode = receivedCode;
     this.body = body;
     this.expectedCode = expectedCode;
-    if (status != null) {
-      this.apiErrors = status.getApiErrors();
+    this.apiResponse = apiResponse;
+    this.response = response;
+
+    if (apiResponse != null && apiResponse.getResponse() != null && apiResponse.getResponse().getStatus() != null) {
+      this.apiErrors = apiResponse.getResponse().getStatus().getApiErrors();
     }
   }
 

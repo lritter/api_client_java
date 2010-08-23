@@ -111,9 +111,13 @@ public class ApiClient {
    */
   public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
     DirectingJob directingJob = new DirectingJob();
-    HttpResponse httpResponse;
-
     directingJob.setDirectingManifest(directingManifest);
+    direct(directingJob, httpCallback, httpCallbackFormat);
+    return directingJob;
+  }
+
+  protected void direct(DirectingJob directingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+    HttpResponse httpResponse;
     httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
     try {
       directingJob.handleHttpResponse(httpResponse, 201);
@@ -121,7 +125,6 @@ public class ApiClient {
     catch (IOException e) {
       throw new HttpException(e);
     }
-    return directingJob; 
   }
 
   /**
@@ -220,7 +223,7 @@ public class ApiClient {
     return doHttpRequest(httpPost, headers);
   }
 
-  private HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
+  protected HttpResponse doApiHttpPost(BaseResource baseResource, String context, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpException {
     HttpResponse httpResponse = null;
     Map<String, String> headers = new HashMap<String, String>();
 
