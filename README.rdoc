@@ -60,6 +60,8 @@ You can use the built in features of Apache Http Client and Commons Loggin to vi
 
 http://hc.apache.org/httpcomponents-client-4.0.1/logging.html
 
+As a helper, you can enable wire logging by openning up the project objet model (POM) and enable the argList node for maven testing. The argList node contains the recommended JVM arguments for wire logging. For the Animoto API CLI, the cli wrapper script already contains wire logging arguments to the JVM.
+
 === Command Line Interface (CLI)
 
 A small CLI application is provided to help you run the API on the command line. Assuming you have generated a JAR with all dependencies (and you just don't like using curl on the command line), you can run the CLI with a utility shell script that sets the classpath and executes the CLI class:

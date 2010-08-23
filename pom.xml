@@ -61,6 +61,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <!-- This allows for HttpClient wire logging when the integration test is run -->
+          <!-- Remove the XML comments if you want to enable wire logging :) -->
+          <!--
+          <argLine>-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog -Dorg.apache.commons.logging.simplelog.showdatetime=true -Dorg.apache.commons.logging.simplelog.log.org.apache.http=DEBUG</argLine>
+          -->
           <excludes>
             <exclude>**/*IntegrationTest*</exclude>
           </excludes>
