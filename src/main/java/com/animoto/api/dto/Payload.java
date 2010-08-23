@@ -6,10 +6,10 @@ import java.lang.reflect.*;
 
 public class Payload {
   private DirectingJob directingJob;
-	private RenderingJob renderingJob;
+  private RenderingJob renderingJob;
   private DirectingAndRenderingJob directingAndRenderingJob;
-	private Storyboard storyboard;
-	private Video video;
+  private Storyboard storyboard;
+  private Video video;
 
   public DirectingJob getDirectingJob() {
     return directingJob;
@@ -19,21 +19,21 @@ public class Payload {
     return getDirectingJob();
   }
 
-	public RenderingJob getRenderingJob() {
-		return renderingJob;
-	}
+  public RenderingJob getRenderingJob() {
+    return renderingJob;
+  }
 
   public RenderingJob getRawRenderingJob() {
     return getRenderingJob();
   }
 
-	public Storyboard getStoryboard() {
-		return storyboard;
-	}
+  public Storyboard getStoryboard() {
+    return storyboard;
+  }
 
-	public Video getVideo() {
-		return video;
-	}
+  public Video getVideo() {
+    return video;
+  }
 
   public DirectingAndRenderingJob getDirectingAndRenderingJob() {
     return directingAndRenderingJob;
@@ -43,15 +43,15 @@ public class Payload {
     return getDirectingAndRenderingJob();
   }
 
-	public BaseResource getBaseResource(Class clazz) {
+  public BaseResource getBaseResource(Class clazz) {
     try {
-			String name = "get" + clazz.getName().substring(clazz.getName().lastIndexOf ('.') + 1);
+      String name = "get" + clazz.getName().substring(clazz.getName().lastIndexOf ('.') + 1);
       Method method = this.getClass().getMethod(name);
       Object value = method.invoke(this);
-			return (BaseResource) value;
+      return (BaseResource) value;
     }
     catch (Exception e) {
       throw new Error(e);
     }
-	}
+  }
 }
