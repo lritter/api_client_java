@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"
+    "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xmlns:svg='http://www.w3.org/2000/svg' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+<head><meta content='application/xhtml+xml;charset=utf-8' http-equiv='Content-type' /><title>Animoto API Java Client</title></head>
+<body>
+<h1 id='animoto_api_java_client'>Animoto API Java Client</h1>
+
+<p>The Animoto API is a RESTful web service that transforms images, videos, music, and text into amazing video presentations.</p>
+
+<p>The Animoto API Java Client provides a convenient Java interface for working with the Animoto RESTful HTTP API.</p>
+
+<h3 id='topics'>Topics</h3>
+
+<ul>
+<li><a href='#who_should_read_this_document'>Who should read this document</a></li>
+
+<li><a href='#what_is_covered_in_this_document'>What is covered in this document</a></li>
+
+<li><a href='#getting_started_using_the_java_client'>Getting Started using the Java Client</a></li>
+
+<li><a href='#how_to_contribute'>How to contribute to this client</a></li>
+</ul>
+
+<p>For for detailed Java client documentation, see the <a href='http://api.client.java.animoto.s3.amazonaws.com/apidocs/index.html'>java client javadocs</a></p>
+<a name='who_should_read_this_document' />
+<h2 id='who_should_read_this_document'>Who should read this document?</h2>
+
+<p>This document is primarily aimed at developers looking to integrate with Animoto services from a Java environment or using the Java language.</p>
+<a name='what_is_covered_in_this_document' />
+<h2 id='what_is_covered_in_this_document'>What is covered in this document</h2>
+
+<p>This document covers the technical details of the Animoto API Java client and provides a general overview of its use.</p>
+
+<p>This document does not cover the details of the Animoto API itself. For such information please see the <a href='http://animoto.com/developer/api'>Animoto API documentation</a></p>
+<a name='getting_started_using_the_ruby_client' />
+<h2 id='getting_started_using_the_ruby_client'>Getting Started using the Ruby Client</h2>
+
+<h3 id='requirements'>Requirements</h3>
+
+<p>The Animoto API Client requires Java 1.5. It is highly recommended that you have Maven 2.2 or greater installed as well since all of the builds and test scripts work off of Maven.</p>
+
+<p>To download or learn more about Maven:</p>
+
+<p>http://maven.apache.org</p>
+
+<p>You must also have a valid Animoto Platform credential set to use the library.</p>
+
+<h3 id='dependencies'>Dependencies</h3>
+
+<p>The Animoto API Client uses the following libraries:</p>
+
+<ul>
+<li>Apache Commons Bean Utils (http://commons.apache.org/beanutils)</li>
+
+<li>Apache Http Client 4.x (http://hc.apache.org/httpcomponents-client)</li>
+
+<li>Google Gson (http://code.google.com/p/google-gson)</li>
+
+<li>Apache Commons CLI (http://commons.apache.org/cli)</li>
+</ul>
+
+<p>For testing, the following is used to verify JSON results:</p>
+
+<ul>
+<li>JSON Simple (http://code.google.com/p/json-simple)</li>
+</ul>
+
+<p>All versions and dependencies are declared in the Maven project object model.</p>
+
+<h3 id='build_commands'>Build Commands</h3>
+
+<p>The project uses the basic Maven tasks:</p>
+
+<ul>
+<li><code>mvn clean</code> - Clean your project directory.</li>
+
+<li><code>mvn compile</code> - Compile the library.</li>
+
+<li><code>mvn test</code> - Run all unit tests for the library.</li>
+
+<li><code>mvn package</code> - Create a JAR file of the library.</li>
+
+<li><code>mvn javadoc:javadoc</code> - Generate Javadoc documentation locally.</li>
+
+<li><code>mvn assembly:assembly</code> - Generate one uber-JAR with all dependencies in the JAR. This is useful for running the CLI interface.</li>
+</ul>
+
+<h3 id='creating_a_video_using_the_java_client'>Creating a video using the Java client</h3>
+
+<p>This example shows you how to create a video in one shot using a <code>DirectingAndRenderingJob</code>.</p>
+
+<pre><code>// Set up the api client
+ApiClient apiClient = ApiClientFactory.newInstance();
+
+// Build a directing manifest with all the visuals and audio for the 
+// video.
+DirectingManifest directingManifest = new DirectingManifest();
+Image image = new Image();
+TitleCard titleCard = new TitleCard();
+Footage footage = new Footage();
+Song song = new Song();
+
+// Provide a song.
+song.setSourceUrl(&quot;http://api.client.java.animoto.s3.amazonaws.com/test_assets/song.mp3&quot;);
+directingManifest.setSong(song);
+
+// Provide an image.
+image.setSourceUrl(&quot;http://api.client.java.animoto.s3.amazonaws.com/test_assets/image.jpg&quot;);
+directingManifest.addVisual(image);
+
+// Provide a title card.
+titleCard.setH1(&quot;hello&quot;);
+titleCard.setH2(&quot;world&quot;);
+directingManifest.addVisual(titleCard);
+
+// Provide a video.
+footage.setSourceUrl(&quot;http://api.client.java.animoto.s3.amazonaws.com/test_assets/footage.mp4&quot;);
+directingManifest.addVisual(footage);
+
+// Set the video title and producer name
+directingManifest.setTitle(&quot;My Animoto Video&quot;);
+directingManifest.setProducerName(&quot;Animoto&quot;);
+
+// Create a rendering manifest to control things like video resolution and 
+// framerate
+RenderingManifest renderingManifest = new RenderingManifest();
+RenderingProfile renderingProfile = new RenderingProfile();
+
+// Setup our rendering profile.
+renderingProfile.setFramerate(new Float(30));
+renderingProfile.setFormat(Format.H264);
+renderingProfile.setVerticalResolution(VerticalResolution.VR_720P);
+
+// Set the storyboard from the Directing Job into the Rendering Manifest.
+renderingManifest.setRenderingProfile(renderingProfile);
+renderingManifest.setStoryboard(directingJob.getStoryboard());
+
+// Send the job to the API.  Status updates will be communicated via a 
+// HTTP POST to &quot;http://mysite.com/animoto_callback&quot;
+httpCallbackUrl = &quot;http://mysite.com/animoto_callback&quot;
+httpCallbackFormat = &quot;json&quot;
+DirectingAndRenderingJob directingAndRenderingJob = null
+directingAndRenderingJob = apiClient.directAndRender(directingManifest, renderingManifest, httpCallbackUrl, httpCallbackFormat)</code></pre>
+
+<h3 id='rendering_an_existing_storyboard'>Rendering an existing Storyboard</h3>
+
+<p>If you already have a storyboard (from a previous directing job), you can then tell the API to render a video.</p>
+
+<pre><code>RenderingJob renderingJob = null;
+RenderingManifest renderingManifest = new RenderingManifest();
+RenderingProfile renderingProfile = new RenderingProfile();
+
+// Setup our rendering profile.
+renderingProfile.setFramerate(new Float(30));
+renderingProfile.setFormat(Format.H264);
+renderingProfile.setVerticalResolution(VerticalResolution.VR_720P);
+
+// Set the storyboard from the Directing Job into the Rendering Manifest.
+renderingManifest.setRenderingProfile(renderingProfile);
+renderingManifest.setStoryboard(directingJob.getStoryboard());
+renderingJob = apiClient.render(renderingManifest);
+
+// Wait until it is completed or failed. (You could also use http 
+// callbacks...)
+while(renderingJob.isPending()) {
+
+  // You should probably sleep here before calling reload.
+  apiClient.reload(renderingJob);
+}
+
+if (renderingJob.isCompleted()) {
+  // Now we have a video!
+  // Remember to reload the Video if you want the metadata and link information.
+  renderingJob.getVideo();
+}</code></pre>
+
+<h3 id='working_with_storyboards_and_videos'>Working with Storyboards and Videos</h3>
+
+<p>When you have a Storyboard object, you must query the API to get all the information related to the resource.</p>
+
+<pre><code>// We have Storyboard location/URL but no information :(
+storyboard.getLocation();
+
+apiClient.reload(storyboard);
+
+// Now we have critical Storyboard links and metadata! :)
+storyboard.getLinks();
+storyboard.getMetadata();</code></pre>
+
+<p>Similarly, when you have a Video object, you must query the API to get all the information related to the resource.</p>
+
+<pre><code>// We have a Video location/URL but no information :(
+video.getLocation();
+
+apiClient.reload(video);
+
+// Now we have critical Storyboard links and metadata! :)
+video.getLinks();
+video.getMetadata();</code></pre>
+
+<h3 id='command_line_interface_cli'>Command Line Interface (CLI)</h3>
+
+<p>A small CLI application is provided to help you run the API on the command line. Assuming you have generated a JAR with all dependencies (and you just don&#8217;t like using curl on the command line), you can run the CLI with a utility shell script that sets the classpath and executes the CLI class:</p>
+
+<p>./cli.sh &#8211;help</p>
+
+<h3 id='integration_tests'>Integration Tests</h3>
+
+<p>By default when you run tests, only the unit tests are run. If you want to run the integration test against the actual API services, then you can run the primary integration test as follows:</p>
+
+<p>mvn -Dtest=ApiClientIntegrationTest test</p>
+
+<p>You will need to have network connectivity for the integration test to work. The integration test uses the ApiClientFactory which reads credentials from the animoto_api_client.properties. Please edit this file under src/test/resources, to add your own credentials.</p>
+
+<h3 id='wire_logging'>Wire Logging</h3>
+
+<p>You can use the built in features of Apache Http Client and Commons Logging to view the network information between the Java API Client and the API. This will allow you to use your current logging framework, whatever it is, to view network information.</p>
+
+<p>http://hc.apache.org/httpcomponents-client-4.0.1/logging.html</p>
+
+<p>As a helper, you can enable wire logging by opening up the project object model (POM) and enable the argList node for maven testing. The argList node contains the recommended JVM arguments for wire logging. For the Animoto API CLI, the cli wrapper script already contains wire logging arguments to the JVM.</p>
+<a name='how_to_contribute' />
+<h2 id='how_to_contribute_to_this_client'>How to contribute to this client</h2>
+
+<ol>
+<li><a href='http://help.github.com/forking/'>Fork</a> <code>animoto_ruby_client</code></li>
+
+<li>Create a topic branch - <code>git checkout -b my_branch</code></li>
+
+<li>Push to your branch - <code>git push origin my_branch</code></li>
+
+<li>Create an <a href='http://github.com/animoto/api_client_java/issues'>Issue</a> with a link to your branch</li>
+
+<li>That&#8217;s it!</li>
+</ol>
+
+<p>You might want to checkout our <a href='http://wiki.github.com/animoto/api_client_java'>the wiki page</a> for information on coding standards, new features, etc.</p>
+</body></html>
