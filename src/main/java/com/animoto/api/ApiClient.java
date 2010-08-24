@@ -39,6 +39,8 @@ import java.io.UnsupportedEncodingException;
  *
  * <a href="http://github.com/animoto/api_client_java">http://github.com/animoto/api_client_java</a>
  * 
+ * <a href="doc-files/help.html">For more information...</a>
+ * 
  * @author  SunDawg
  * @since   1.0
  * @version 1.0

@@ -3,7 +3,11 @@ package com.animoto.api;
 import java.util.ResourceBundle;
 
 /**
- * Factory to create ApiClient objects with key, secret, and host read from a properties file, animoto_api_client.properties.
+ * Factory to create ApiClient objects with key, secret, and host read from a properties file, animoto_api_client.properties.<p/>
+ *
+ * There is an example copy inside of src/test/resources for use with the ApiClientIntegrationTest.<p/>
+ *
+ * @see ApiClientIntegrationTest
  */
 public class ApiClientFactory {
 
