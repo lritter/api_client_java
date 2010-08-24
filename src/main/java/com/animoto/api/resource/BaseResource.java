@@ -6,7 +6,7 @@ import com.animoto.api.util.StringUtil;
 import com.animoto.api.dto.ApiResponse;
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
-import com.animoto.api.error.ContractError;
+import com.animoto.api.exception.ContractException;
 import com.animoto.api.dto.Response;
 
 import org.apache.http.HttpResponse;
@@ -165,7 +165,7 @@ public abstract class BaseResource implements Resource {
     return GsonUtil.create();
   }
 
-  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, ContractException, IOException {
     int statusCode;
     String body;
     ApiResponse apiResponse;
@@ -182,28 +182,28 @@ public abstract class BaseResource implements Resource {
     doErrorableBeanCopy(dtoBaseResource);
     setRequestId(httpResponse.getFirstHeader("x-animoto-request-id").getValue());
     if (getLocation() == null ||  StringUtil.isBlank(getLocation())) {
-      throw new ContractError();
+      throw new ContractException("Expected location URL to be present.");
     }
   }
 
-  protected void populateStoryboard() {
+  protected void populateStoryboard() throws ContractException {
     if (isCompleted()) {
       Storyboard storyboard = new Storyboard();
       storyboard.setLocation(getLinks().get("storyboard"));
       setStoryboard(storyboard);
       if (storyboard.getLocation() == null) {
-        throw new ContractError();
+        throw new ContractException("Expected Storyboard URL to be present.");
       }
     }
   }
 
-  protected void populateVideo() {
+  protected void populateVideo() throws ContractException {
     if (isCompleted()) {
       Video video = new Video();
       video.getLinks().put("self", getLinks().get("video"));
       setVideo(video);
       if (video.getLocation() == null) {
-        throw new ContractError();
+        throw new ContractException("Expected Video URL to be present.");
       }
     }
   }

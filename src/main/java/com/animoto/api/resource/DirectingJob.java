@@ -3,6 +3,7 @@ package com.animoto.api.resource;
 import com.animoto.api.Jsonable;
 import com.animoto.api.DirectingManifest;
 import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.exception.ContractException;
 import com.animoto.api.util.GsonUtil;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class DirectingJob extends BaseResource implements Jsonable {
     return newGson().toJson(new Container(this));
   }
 
-  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, ContractException, IOException {
     super.handleHttpResponse(httpResponse, expectedStatusCode);
     populateStoryboard();
   }
