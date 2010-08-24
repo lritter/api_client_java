@@ -15,6 +15,7 @@ import com.animoto.api.RenderingManifest;
 import com.animoto.api.exception.ApiException;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.exception.HttpException;
+import com.animoto.api.exception.ContractException;
 
 import com.animoto.api.enums.HttpCallbackFormat;
 
@@ -95,8 +96,9 @@ public class ApiClient {
    * @return      DirectingJob
    * @exception   HttpExpectationException
    * @exception   HttpException
+   * @exception   ContractException
    */
-  public DirectingJob direct(DirectingManifest directingManifest) throws HttpExpectationException, HttpException {
+  public DirectingJob direct(DirectingManifest directingManifest) throws HttpExpectationException, HttpException, ContractException {
     return direct(directingManifest, null, null);
   }
 
@@ -108,15 +110,16 @@ public class ApiClient {
    * @param       httpCallbackFormat          The payload type when the callback is made.
    * @exception   HttpExpectationException
    * @exception   HttpExpectation
+   * @exception   ContractException
    */
-  public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  public DirectingJob direct(DirectingManifest directingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     DirectingJob directingJob = new DirectingJob();
     directingJob.setDirectingManifest(directingManifest);
     direct(directingJob, httpCallback, httpCallbackFormat);
     return directingJob;
   }
 
-  protected void direct(DirectingJob directingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  protected void direct(DirectingJob directingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     HttpResponse httpResponse = doApiHttpPost(directingJob, "directing", httpCallback, httpCallbackFormat);
     try {
       directingJob.handleHttpResponse(httpResponse, 201);
@@ -132,8 +135,9 @@ public class ApiClient {
    * @param       renderingManifest           The manifest payload to render.   
    * @exception   HttpExpectationException
    * @exception   HttpExpectation
+   * @exception   ContractException
    */
-  public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+  public RenderingJob render(RenderingManifest renderingManifest) throws HttpExpectationException, HttpException, ContractException {
     return render(renderingManifest, null, null);
   }
 
@@ -145,15 +149,16 @@ public class ApiClient {
    * @param       httpCallbackFormat          The payload type when the callback is made.
    * @exception   HttpExpectationException
    * @exception   HttpExpectation
+   * @exception   ContractException
    */
-  public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  public RenderingJob render(RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     RenderingJob renderingJob = new RenderingJob();
     renderingJob.setRenderingManifest(renderingManifest);
     render(renderingJob, httpCallback, httpCallbackFormat);
     return renderingJob;
   }
 
-  protected void render(RenderingJob renderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  protected void render(RenderingJob renderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     HttpResponse httpResponse = doApiHttpPost(renderingJob, "rendering", httpCallback, httpCallbackFormat);
     try {
       renderingJob.handleHttpResponse(httpResponse, 201);
@@ -167,7 +172,7 @@ public class ApiClient {
   /**
    *
    */
-  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest) throws HttpExpectationException, HttpException {
+  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest) throws HttpExpectationException, HttpException, ContractException {
     return directAndRender(directingManifest, renderingManifest, null, null);
   }
 
@@ -180,8 +185,9 @@ public class ApiClient {
    * @param       httpCallbackFormat            The payload type when the callback is made.
    * @exception   HttpExpectationException
    * @exception   HttpExpectation
+   * @exception   ContractException
    */
-  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  public DirectingAndRenderingJob directAndRender(DirectingManifest directingManifest, RenderingManifest renderingManifest, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     DirectingAndRenderingJob directingAndRenderingJob = new DirectingAndRenderingJob();
     directingAndRenderingJob.setDirectingManifest(directingManifest);
     directingAndRenderingJob.setRenderingManifest(renderingManifest);
@@ -190,7 +196,7 @@ public class ApiClient {
     return directingAndRenderingJob;
   }
 
-  protected void directAndRender(DirectingAndRenderingJob directingAndRenderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException {
+  protected void directAndRender(DirectingAndRenderingJob directingAndRenderingJob, String httpCallback, HttpCallbackFormat httpCallbackFormat) throws HttpExpectationException, HttpException, ContractException {
     HttpResponse httpResponse = doApiHttpPost(directingAndRenderingJob, "directing_and_rendering", httpCallback, httpCallbackFormat);
     try {
       directingAndRenderingJob.handleHttpResponse(httpResponse, 201);
@@ -206,8 +212,9 @@ public class ApiClient {
    * @param       resource                    The resource to refresh with the latest information from API.
    * @exception   HttpException 
    * @exception   HttpExpectationException
+   * @exception   ContractException
    */
-  public void reload(Resource resource) throws HttpException, HttpExpectationException {
+  public void reload(Resource resource) throws HttpException, HttpExpectationException, ContractException {
     Map<String, String> headers = new HashMap<String, String>();
     HttpResponse httpResponse;
 

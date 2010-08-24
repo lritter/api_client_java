@@ -4,6 +4,7 @@ import com.animoto.api.Jsonable;
 import com.animoto.api.RenderingManifest;
 import com.animoto.api.util.GsonUtil;
 import com.animoto.api.exception.HttpExpectationException;
+import com.animoto.api.exception.ContractException;
 
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ public class RenderingJob extends BaseResource implements Jsonable {
     return newGson().toJson(new Container(this));
   }
 
-  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, ContractException, IOException {
     super.handleHttpResponse(httpResponse, expectedStatusCode);
     populateStoryboard();
     populateVideo();

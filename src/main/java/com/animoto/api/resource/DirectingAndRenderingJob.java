@@ -5,6 +5,7 @@ import com.animoto.api.DirectingManifest;
 import com.animoto.api.RenderingManifest;
 import com.animoto.api.exception.HttpExpectationException;
 import com.animoto.api.exception.HttpException;
+import com.animoto.api.exception.ContractException;
 
 import org.apache.http.HttpResponse;
 
@@ -39,7 +40,7 @@ public class DirectingAndRenderingJob extends BaseResource implements Jsonable {
     return renderingManifest;
   }
 
-  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, IOException {
+  public void handleHttpResponse(HttpResponse httpResponse, int expectedStatusCode) throws HttpExpectationException, ContractException, IOException {
     super.handleHttpResponse(httpResponse, expectedStatusCode);
     populateStoryboard();
     populateVideo();
