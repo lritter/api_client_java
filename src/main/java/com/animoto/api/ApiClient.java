@@ -35,6 +35,8 @@ import java.io.UnsupportedEncodingException;
 /**
  * ApiClient is the main class for interacting with the Animoto API. <p/>
  * 
+ * To create an ApiClient using a resource bundle, animoto_api_client.properties, use the ApiClientFactory.<p/>
+ * 
  * For further information visit: <p/>
  *
  * <a href="http://github.com/animoto/api_client_java">http://github.com/animoto/api_client_java</a>
@@ -44,6 +46,8 @@ import java.io.UnsupportedEncodingException;
  * @author  SunDawg
  * @since   1.0
  * @version 1.0
+ *
+ * @see ApiClientFactory
  */
 public class ApiClient {
   private String key;

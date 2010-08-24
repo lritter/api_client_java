@@ -7,7 +7,12 @@ import java.util.ResourceBundle;
  *
  * There is an example copy inside of src/test/resources for use with the ApiClientIntegrationTest.<p/>
  *
- * @see ApiClientIntegrationTest
+ * The configurations are:<p/>
+ * <ul>
+ *  <li>api.key - The credential key provided by Animoto.</li>
+ *  <li>api.secret - The credential secret provided by Animoto.</li>
+ *  <li>api.host - The environment host you want the client to communicate with.</li>
+ * </ul>
  */
 public class ApiClientFactory {
 
